@@ -4,7 +4,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var milesBiked: Double?
+    @State private var milesBikedLastYear: Double?
+    @State private var milesBikedThisYear: Double?
     @State private var isAuthorized = false
     
     let healthKitManager = HealthKitManager()
@@ -14,16 +15,18 @@ struct ContentView: View {
             Text("🚴‍♀️") // Bike emoji
                 .font(.largeTitle)
             if isAuthorized {
-                Text("Miles Biked: \(milesBiked ?? 0)")
+                Text("Miles Biked Last Year: \(milesBikedLastYear ?? 0)")
+                Text("Miles Biked This Year: \(milesBikedThisYear ?? 0)")
             }
         }
         .onAppear() {
-            fetchMilesBiked()
+            fetchMilesBikedLastYear()
+            fetchMilesBikedThisYear()
         }
         .padding()
     }
     
-    func fetchMilesBiked() {
+    func fetchMilesBikedLastYear() {
         print("fetch step count")
         print("requesting Authorization")
         healthKitManager.requestAuthorization { success, error in
@@ -35,9 +38,27 @@ struct ContentView: View {
             }
         }
         
-        healthKitManager.fetchMilesBiked { miles, error in
+        healthKitManager.milesBikedLastYear { miles, error in
             print(miles)
-            self.milesBiked = miles
+            self.milesBikedLastYear = miles
+            print(error)
+        }
+    }
+    func fetchMilesBikedThisYear() {
+        print("fetch step count")
+        print("requesting Authorization")
+        healthKitManager.requestAuthorization { success, error in
+            if success {
+                self.isAuthorized = true
+            } else {
+                print("Authorization error")
+                print(error)
+            }
+        }
+        
+        healthKitManager.milesBikedThisYear { miles, error in
+            print(miles)
+            self.milesBikedThisYear = miles
             print(error)
         }
     }

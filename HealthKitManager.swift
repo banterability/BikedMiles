@@ -35,7 +35,7 @@ class HealthKitManager {
 
     }
  
-    func fetchMilesBiked(completion: @escaping (Double?, Error?) -> Void) {
+    func fetchMilesBiked(year: Int, completion: @escaping (Double?, Error?) -> Void) {
         print(HKHealthStore.isHealthDataAvailable())
         
         let quantityType = HKQuantityTypeIdentifier.distanceCycling
@@ -47,14 +47,10 @@ class HealthKitManager {
             return
         }
         
-        // Get the current date and calendar
-        let now = Date()
         let calendar = Calendar.current
-
-        // Calculate the first and last day of the last year
-        let currentYear = calendar.component(.year, from: now)
-        let firstDayOfLastYear = calendar.date(from: DateComponents(year: currentYear - 1, month: 1, day: 1))!
-        let lastDayOfLastYear = calendar.date(from: DateComponents(year: currentYear - 1, month: 12, day: 31))!
+        
+        let firstDayOfLastYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
+        let lastDayOfLastYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
 
         print(firstDayOfLastYear)
         print(lastDayOfLastYear)
@@ -81,5 +77,24 @@ class HealthKitManager {
         let healthStore = HKHealthStore()
         healthStore.execute(query)
     }
+    
+    func milesBikedThisYear(completion: @escaping (Double?, Error?) -> Void) {
+        // Get the current date and calendar
+        let now = Date()
+        let calendar = Calendar.current
 
+        // Calculate the first and last day of the last year
+        let currentYear = calendar.component(.year, from: now)
+        fetchMilesBiked(year: currentYear, completion: completion)
+    }
+    
+    func milesBikedLastYear(completion: @escaping (Double?, Error?) -> Void) {
+        // Get the current date and calendar
+        let now = Date()
+        let calendar = Calendar.current
+
+        // Calculate the first and last day of the last year
+        let lastYear = (calendar.component(.year, from: now) - 1)
+        fetchMilesBiked(year: lastYear, completion: completion)
+    }
 }
