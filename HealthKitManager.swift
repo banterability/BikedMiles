@@ -49,14 +49,14 @@ class HealthKitManager {
         
         let calendar = Calendar.current
         
-        let firstDayOfLastYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
-        let lastDayOfLastYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
+        let firstDayOfYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
+        let lastDayOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
 
-        print(firstDayOfLastYear)
-        print(lastDayOfLastYear)
+        print(firstDayOfYear)
+        print(lastDayOfYear)
         
         // Create a predicate for the date range of last year
-        let predicate = HKQuery.predicateForSamples(withStart: firstDayOfLastYear, end: lastDayOfLastYear, options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: firstDayOfYear, end: lastDayOfYear, options: .strictStartDate)
 
         
         
@@ -83,7 +83,7 @@ class HealthKitManager {
         let now = Date()
         let calendar = Calendar.current
 
-        // Calculate the first and last day of the last year
+        // Calculate the first and last day of the current year
         let currentYear = calendar.component(.year, from: now)
         fetchMilesBiked(year: currentYear, completion: completion)
     }
