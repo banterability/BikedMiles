@@ -7,8 +7,6 @@
 
 import HealthKit
 
-import HealthKit
-
 class HealthKitManager {
     private var healthStore: HKHealthStore?
     private let calendar = Calendar.current
