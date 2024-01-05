@@ -4,31 +4,43 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var milesBikedLastYear: Double?
-    @State private var milesBikedThisYear: Double?
+    @State private var milesBiked: [Int: Double] = [:]
+    @State private var milesFoot: [Int: Double] = [:]
     @State private var isAuthorized = false
     
     let healthKitManager = HealthKitManager()
+    let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 1
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
     
     var body: some View {
         VStack {
-            Text("🚴‍♀️") // Bike emoji
-                .font(.largeTitle)
+            Text("🏃‍♂️ Miles by Foot").font(.largeTitle)
             if isAuthorized {
-                Text("Miles Biked Last Year: \(milesBikedLastYear ?? 0)")
-                Text("Miles Biked This Year: \(milesBikedThisYear ?? 0)")
+                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2023] ?? 0))!)")
+                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2024] ?? 0))!)")
+            } else {
+                Text("Unable to access HealthKit")
+            }
+            Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
+            if isAuthorized {
+                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)")
+                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)")
+            } else {
+                Text("Unable to access HealthKit")
             }
         }
         .onAppear() {
-            fetchMilesBikedLastYear()
-            fetchMilesBikedThisYear()
+            fetchMilesData()
         }
         .padding()
     }
     
-    func fetchMilesBikedLastYear() {
-        print("fetch step count")
-        print("requesting Authorization")
+    private func fetchMilesData() {
         healthKitManager.requestAuthorization { success, error in
             if success {
                 self.isAuthorized = true
@@ -37,32 +49,18 @@ struct ContentView: View {
                 print(error)
             }
         }
-        
-        healthKitManager.milesBikedLastYear { miles, error in
-            print(miles)
-            self.milesBikedLastYear = miles
-            print(error)
-        }
-    }
-    func fetchMilesBikedThisYear() {
-        print("fetch step count")
-        print("requesting Authorization")
-        healthKitManager.requestAuthorization { success, error in
-            if success {
-                self.isAuthorized = true
-            } else {
-                print("Authorization error")
+        let years = [2023, 2024]
+        for year in years {
+            healthKitManager.fetchMilesByBike(year: year) { miles, error in
+                self.milesBiked[year] = miles
+                print(error)
+            }
+            healthKitManager.fetchMilesByFoot(year: year) { miles, error in
+                self.milesFoot[year] = miles
                 print(error)
             }
         }
-        
-        healthKitManager.milesBikedThisYear { miles, error in
-            print(miles)
-            self.milesBikedThisYear = miles
-            print(error)
-        }
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {
