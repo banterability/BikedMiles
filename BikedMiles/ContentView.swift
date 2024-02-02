@@ -5,7 +5,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var milesBiked: [Int: Double] = [:]
-    @State private var milesFoot: [Int: Double] = [:]
+//    @State private var milesFoot: [Int: Double] = [:]
     @State private var isAuthorized = false
     
     let healthKitManager = HealthKitManager()
@@ -19,13 +19,13 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Text("🏃‍♂️ Miles by Foot").font(.largeTitle)
-            if isAuthorized {
-                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2023] ?? 0))!)")
-                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2024] ?? 0))!)")
-            } else {
-                Text("Unable to access HealthKit")
-            }
+//            Text("🏃‍♂️ Miles by Foot").font(.largeTitle)
+//            if isAuthorized {
+//                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2023] ?? 0))!)")
+//                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2024] ?? 0))!)")
+//            } else {
+//                Text("Unable to access HealthKit")
+//            }
             Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
             if isAuthorized {
                 Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)")
@@ -55,10 +55,10 @@ struct ContentView: View {
                 self.milesBiked[year] = miles
                 print(error)
             }
-            healthKitManager.fetchMilesByFoot(year: year) { miles, error in
-                self.milesFoot[year] = miles
-                print(error)
-            }
+//            healthKitManager.fetchMilesByFoot(year: year) { miles, error in
+//                self.milesFoot[year] = miles
+//                print(error)
+//            }
         }
     }
 }

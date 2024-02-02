@@ -32,13 +32,14 @@ class HealthKitManager {
             completion(false, error)
             return
         }
-        guard let footDistanceType = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning) else {
-            let error = NSError(domain: "HealthKitManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "Walking/Running Distance Type not available"])
-            completion(false, error)
-            return
-        }
+//        guard let footDistanceType = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning) else {
+//            let error = NSError(domain: "HealthKitManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "Walking/Running Distance Type not available"])
+//            completion(false, error)
+//            return
+//        }
 
-        healthStore.requestAuthorization(toShare: [], read: [cyclingDistanceType, footDistanceType]) { success, error in
+//        healthStore.requestAuthorization(toShare: [], read: [cyclingDistanceType, footDistanceType]) { success, error in
+        healthStore.requestAuthorization(toShare: [], read: [cyclingDistanceType]) { success, error in
             completion(success, error)
         }
     }
@@ -72,8 +73,8 @@ class HealthKitManager {
         fetchMiles(for: .distanceCycling, year: year, completion: completion)
     }
 
-    func fetchMilesByFoot(year: Int, completion: @escaping (Double?, Error?) -> Void) {
-        fetchMiles(for: .distanceWalkingRunning, year: year, completion: completion)
-    }
+//    func fetchMilesByFoot(year: Int, completion: @escaping (Double?, Error?) -> Void) {
+//        fetchMiles(for: .distanceWalkingRunning, year: year, completion: completion)
+//    }
 
 }
