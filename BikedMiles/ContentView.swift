@@ -5,7 +5,6 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var milesBiked: [Int: Double] = [:]
-//    @State private var milesFoot: [Int: Double] = [:]
     @State private var isAuthorized = false
     
     let healthKitManager = HealthKitManager()
@@ -55,10 +54,6 @@ struct ContentView: View {
                 self.milesBiked[year] = miles
                 print(error)
             }
-//            healthKitManager.fetchMilesByFoot(year: year) { miles, error in
-//                self.milesFoot[year] = miles
-//                print(error)
-//            }
         }
     }
 }
