@@ -18,17 +18,18 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-//            Text("🏃‍♂️ Miles by Foot").font(.largeTitle)
-//            if isAuthorized {
-//                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2023] ?? 0))!)")
-//                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesFoot[2024] ?? 0))!)")
-//            } else {
-//                Text("Unable to access HealthKit")
-//            }
             Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
             if isAuthorized {
-                Text("Last Year: \(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)")
-                Text("This Year: \(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)")
+                HStack{
+                    Text("Last Year:").font(.subheadline).bold()
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)
+                    Text("miles")
+                }.font(.title2)
+                HStack {
+                    Text("This Year:").font(.subheadline).bold()
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)
+                    Text("miles")
+                }.font(.title2)
             } else {
                 Text("Unable to access HealthKit")
             }
