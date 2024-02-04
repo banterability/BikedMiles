@@ -6,7 +6,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var milesBiked: [Int: Double] = [:]
     @State private var isAuthorized = false
-    
+    @State private var updatedStr = "Loading...";
+
     let healthKitManager = HealthKitManager()
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -18,6 +19,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            Spacer()
             Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
             if isAuthorized {
                 HStack{
@@ -33,6 +35,11 @@ struct ContentView: View {
             } else {
                 Text("Unable to access HealthKit")
             }
+            Spacer()
+            HStack{
+                Text("Updated At: ")
+                Text(updatedStr)
+            }.font(.subheadline)
         }
         .onAppear() {
             fetchMilesData()
@@ -40,6 +47,14 @@ struct ContentView: View {
         .padding()
     }
     
+    private func updatedAt() {
+        let formatter = DateFormatter();
+        formatter.timeStyle = .short;
+        formatter.dateStyle = .short;
+        let dateString = formatter.string(from: Date())
+        self.updatedStr = dateString;
+    }
+
     private func fetchMilesData() {
         healthKitManager.requestAuthorization { success, error in
             if success {
@@ -56,6 +71,7 @@ struct ContentView: View {
                 print(error)
             }
         }
+        updatedAt()
     }
 }
 
