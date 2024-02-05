@@ -6,9 +6,15 @@ import SwiftUI
 struct ContentView: View {
     @State private var milesBiked: [Int: Double] = [:]
     @State private var isAuthorized = false
-    @State private var updatedStr = "Loading...";
+    @State private var updatedAt: Date? = nil
 
     let healthKitManager = HealthKitManager()
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter;
+    }()
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 0
@@ -38,21 +44,16 @@ struct ContentView: View {
             Spacer()
             HStack{
                 Text("Updated At: ")
-                Text(updatedStr)
+                Text(updatedAt != nil ? dateFormatter.string(from: updatedAt!) : "Never")
+                Button("Refresh") {
+                    fetchMilesData()
+                }
             }.font(.subheadline)
         }
         .onAppear() {
             fetchMilesData()
         }
         .padding()
-    }
-    
-    private func updatedAt() {
-        let formatter = DateFormatter();
-        formatter.timeStyle = .short;
-        formatter.dateStyle = .short;
-        let dateString = formatter.string(from: Date())
-        self.updatedStr = dateString;
     }
 
     private func fetchMilesData() {
@@ -71,7 +72,7 @@ struct ContentView: View {
                 print(error)
             }
         }
-        updatedAt()
+        self.updatedAt = Date()
     }
 }
 
