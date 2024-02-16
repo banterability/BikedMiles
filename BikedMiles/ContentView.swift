@@ -62,14 +62,12 @@ struct ContentView: View {
                 self.isAuthorized = true
             } else {
                 print("Authorization error")
-                print(error)
             }
         }
         let years = [2023, 2024]
         for year in years {
             healthKitManager.fetchMilesByBike(year: year) { miles, error in
                 self.milesBiked[year] = miles
-                print(error)
             }
         }
         self.updatedAt = Date()
