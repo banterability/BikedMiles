@@ -14,6 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F1409FE2B801A0400CFF517 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1F5A22382B6DA5B70070E519 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1FC1CD492B462BE400FF71B0 /* BikedMiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikedMiles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikedMilesApp.swift; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		1FC1CD4B2B462BE400FF71B0 /* BikedMiles */ = {
 			isa = PBXGroup;
 			children = (
+				1F1409FE2B801A0400CFF517 /* Info.plist */,
 				1FC1CD5C2B462DA100FF71B0 /* BikedMilesDebug.entitlements */,
 				1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */,
 				1FC1CD4E2B462BE400FF71B0 /* ContentView.swift */,
@@ -269,6 +271,7 @@
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BikedMiles/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -299,6 +302,7 @@
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BikedMiles/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
