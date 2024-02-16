@@ -16,6 +16,7 @@
 /* Begin PBXFileReference section */
 		1F1409FE2B801A0400CFF517 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1F5A22382B6DA5B70070E519 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1F7ACF632B801B3000A6C587 /* BikedMiles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BikedMiles.entitlements; sourceTree = "<group>"; };
 		1FC1CD492B462BE400FF71B0 /* BikedMiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikedMiles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikedMilesApp.swift; sourceTree = "<group>"; };
 		1FC1CD4E2B462BE400FF71B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -54,6 +55,7 @@
 		1FC1CD4B2B462BE400FF71B0 /* BikedMiles */ = {
 			isa = PBXGroup;
 			children = (
+				1F7ACF632B801B3000A6C587 /* BikedMiles.entitlements */,
 				1F1409FE2B801A0400CFF517 /* Info.plist */,
 				1FC1CD5C2B462DA100FF71B0 /* BikedMilesDebug.entitlements */,
 				1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */,
@@ -272,6 +274,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -286,9 +289,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.banterability.BikedMiles;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -297,12 +304,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BikedMiles/BikedMiles.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -317,9 +326,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.banterability.BikedMiles;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
