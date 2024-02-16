@@ -7,7 +7,6 @@ struct ContentView: View {
     @State private var milesBiked: [Int: Double] = [:]
     @State private var isAuthorized = false
     @State private var updatedAt: Date? = nil
-    @State private var loaded: Bool = false;
 
     let healthKitManager = HealthKitManager()
     let dateFormatter: DateFormatter = {
@@ -28,24 +27,21 @@ struct ContentView: View {
         VStack {
             Spacer()
             Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
-            if loaded {
-                if isAuthorized {
-                    HStack{
-                        Text("Last Year:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                    HStack {
-                        Text("This Year:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                } else {
-                    Text("Unable to access HealthKit")
-                }
+            if isAuthorized {
+                HStack{
+                    Text("Last Year:").font(.subheadline).bold()
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)
+                    Text("miles")
+                }.font(.title2)
+                HStack {
+                    Text("This Year:").font(.subheadline).bold()
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)
+                    Text("miles")
+                }.font(.title2)
             } else {
-                Text("Loading...")
+                Text("Unable to access HealthKit")
             }
+
             Spacer()
             HStack{
                 Text("Updated At: ")
@@ -57,9 +53,7 @@ struct ContentView: View {
         }
         .onAppear() {
             fetchMilesData()
-            self.loaded = true;
         }
-        .padding()
     }
 
     private func fetchMilesData() {
