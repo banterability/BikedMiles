@@ -41,7 +41,6 @@ struct ContentView: View {
             } else {
                 Text("Unable to access HealthKit")
             }
-
             Spacer()
             HStack{
                 Text("Updated At: ")
@@ -54,6 +53,9 @@ struct ContentView: View {
         .onAppear() {
             fetchMilesData()
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification), perform: { _ in
+            fetchMilesData()
+        })
     }
 
     private func fetchMilesData() {
