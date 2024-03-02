@@ -11,6 +11,7 @@
 		1FC1CD4D2B462BE400FF71B0 /* BikedMilesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */; };
 		1FC1CD4F2B462BE400FF71B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1CD4E2B462BE400FF71B0 /* ContentView.swift */; };
 		1FC1CD5B2B462C1E00FF71B0 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1CD5A2B462C1E00FF71B0 /* HealthKitManager.swift */; };
+		C96B712C4FA34A468AEDA267 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 9362788F07414E4F8E45E81D /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C96B712C4FA34A468AEDA267 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,12 +77,16 @@
 				1FC1CD452B462BE400FF71B0 /* Sources */,
 				1FC1CD462B462BE400FF71B0 /* Frameworks */,
 				1FC1CD472B462BE400FF71B0 /* Resources */,
+				CDB6DB2062554639A4AEF145 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = BikedMiles;
+			packageProductDependencies = (
+				9362788F07414E4F8E45E81D /* Sentry */,
+			);
 			productName = BikedMiles;
 			productReference = 1FC1CD492B462BE400FF71B0 /* BikedMiles.app */;
 			productType = "com.apple.product-type.application";
@@ -109,6 +115,9 @@
 				Base,
 			);
 			mainGroup = 1FC1CD402B462BE400FF71B0;
+			packageReferences = (
+				D3B792CF456F4F8BB3946711 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+			);
 			productRefGroup = 1FC1CD4A2B462BE400FF71B0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -128,6 +137,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CDB6DB2062554639A4AEF145 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script is responsable to upload debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\nexport SENTRY_ORG=banterability\nexport SENTRY_PROJECT=biked-miles\nERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1FC1CD452B462BE400FF71B0 /* Sources */ = {
@@ -269,10 +296,12 @@
 				CODE_SIGN_ENTITLEMENTS = BikedMiles/BikedMilesDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Miles Biked";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
@@ -306,10 +335,12 @@
 				CODE_SIGN_ENTITLEMENTS = BikedMiles/BikedMiles.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Miles Biked";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Count those miles";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Count those miles";
@@ -358,6 +389,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D3B792CF456F4F8BB3946711 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9362788F07414E4F8E45E81D /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3B792CF456F4F8BB3946711 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1FC1CD412B462BE400FF71B0 /* Project object */;
 }
