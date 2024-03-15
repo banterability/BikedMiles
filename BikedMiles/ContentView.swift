@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var milesBiked: [Int: Double] = [:]
+    @State private var milesBiked: [String: Double] = [:]
     @State private var isAuthorized = false
     @State private var updatedAt: Date? = nil
 
@@ -26,16 +26,41 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("🚴‍♀️ Miles by Bike").font(.largeTitle)
+            Text("🚴‍♀️ Miles by Bike").font(.largeTitle).padding([.bottom], 20)
+
             if isAuthorized {
+                VStack{
+                    HStack{
+                        Text("Last Week:").font(.subheadline).bold()
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastWeek"] ?? 0))!)
+                        Text("miles")
+                    }.font(.title2)
+                    HStack {
+                        Text("This Week:").font(.subheadline).bold()
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisWeek"] ?? 0))!)
+                        Text("miles")
+                    }.font(.title2)
+                }.padding([.bottom], 10)
+                VStack{
+                    HStack{
+                        Text("Last Month:").font(.subheadline).bold()
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastMonth"] ?? 0))!)
+                        Text("miles")
+                    }.font(.title2)
+                    HStack {
+                        Text("This Month:").font(.subheadline).bold()
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisMonth"] ?? 0))!)
+                        Text("miles")
+                    }.font(.title2)
+                }.padding([.bottom], 10)
                 HStack{
                     Text("Last Year:").font(.subheadline).bold()
-                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2023] ?? 0))!)
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastYear"] ?? 0))!)
                     Text("miles")
                 }.font(.title2)
                 HStack {
                     Text("This Year:").font(.subheadline).bold()
-                    Text(numberFormatter.string(from: NSNumber(value: milesBiked[2024] ?? 0))!)
+                    Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisYear"] ?? 0))!)
                     Text("miles")
                 }.font(.title2)
             } else {
