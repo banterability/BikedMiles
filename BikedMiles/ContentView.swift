@@ -6,7 +6,6 @@ import SwiftUI
 struct ContentView: View {
     @State private var milesBiked: [String: Double] = [:]
     @State private var isAuthorized = false
-    @State private var updatedAt: Date? = nil
 
     let healthKitManager = HealthKitManager()
     let dateFormatter: DateFormatter = {
@@ -67,13 +66,6 @@ struct ContentView: View {
                 Text("Unable to access HealthKit")
             }
             Spacer()
-            HStack{
-                Text("Updated At: ")
-                Text(updatedAt != nil ? dateFormatter.string(from: updatedAt!) : "Never")
-                Button("Refresh") {
-                    fetchMilesData()
-                }
-            }.font(.subheadline)
         }
         .onAppear() {
             fetchMilesData()
@@ -105,8 +97,6 @@ struct ContentView: View {
             healthKitManager.fetchMilesByBikeForMonth(year: currentMonthYear, month: currentMonth) { miles, error in self.milesBiked["thisMonth"] = miles}
             healthKitManager.fetchMilesByBikeForYear(year: previousYear) { miles, error in self.milesBiked["lastYear"] = miles}
             healthKitManager.fetchMilesByBikeForYear(year: currentMonthYear) { miles, error in self.milesBiked["thisYear"] = miles}
-
-            self.updatedAt = Date()
         } catch {
            print("An error occurred while calculating dates: \(error)")
 
