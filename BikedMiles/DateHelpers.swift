@@ -19,7 +19,6 @@ extension Date {
         let year = calendar.component(.year, from: weekStartDate)
         let month = calendar.component(.month, from :weekStartDate)
         let day = calendar.component(.day, from: weekStartDate)
-        print("this week", year, month, day)
         return (year, month, day)
     }
     
@@ -33,7 +32,6 @@ extension Date {
         let year = calendar.component(.year, from: lastWeekDate)
         let month = calendar.component(.month, from: lastWeekDate)
         let day = calendar.component(.day, from: lastWeekDate)
-        print("last week", year, month, day)
         return (year, month, day)
     }
     

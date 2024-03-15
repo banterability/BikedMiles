@@ -91,13 +91,26 @@ struct ContentView: View {
                 print("Authorization error")
             }
         }
-        let years = [2023, 2024]
-        for year in years {
-            healthKitManager.fetchMilesByBike(year: year) { miles, error in
-                self.milesBiked[year] = miles
-            }
-        }
-        self.updatedAt = Date()
+        let currentDate = Date()
+        do{
+            let (currentMonthYear, currentMonth) = try currentDate.thisMonth()
+            let (lastMonthYear, lastMonth) = try currentDate.lastMonth()
+            let previousYear = try currentDate.lastYear()
+            let currentWeek = currentDate.thisWeek();
+            let lastWeek = try currentDate.lastWeek();
+
+            healthKitManager.fetchMilesByBikeForWeek(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day) { miles, error in self.milesBiked["lastWeek"] = miles}
+            healthKitManager.fetchMilesByBikeForWeek(year: currentWeek.year, month: currentWeek.month, day: currentWeek.day) { miles, error in self.milesBiked["thisWeek"] = miles}
+            healthKitManager.fetchMilesByBikeForMonth(year: lastMonthYear, month: lastMonth) { miles, error in self.milesBiked["lastMonth"] = miles}
+            healthKitManager.fetchMilesByBikeForMonth(year: currentMonthYear, month: currentMonth) { miles, error in self.milesBiked["thisMonth"] = miles}
+            healthKitManager.fetchMilesByBikeForYear(year: previousYear) { miles, error in self.milesBiked["lastYear"] = miles}
+            healthKitManager.fetchMilesByBikeForYear(year: currentMonthYear) { miles, error in self.milesBiked["thisYear"] = miles}
+
+            self.updatedAt = Date()
+        } catch {
+           print("An error occurred while calculating dates: \(error)")
+
+       }
     }
 }
 

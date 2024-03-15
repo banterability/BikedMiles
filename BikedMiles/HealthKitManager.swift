@@ -38,19 +38,14 @@ class HealthKitManager {
         }
     }
 
-    func fetchMiles(for activityType: HKQuantityTypeIdentifier, year: Int, completion: @escaping (Double?, Error?) -> Void) {
+    func fetchMilesForRange(for activityType: HKQuantityTypeIdentifier, startDate: Date, endDate: Date, completion: @escaping (Double?, Error?) -> Void) {
         guard let healthStore = self.healthStore,
               let activityDistanceType = HKObjectType.quantityType(forIdentifier: activityType) else {
             let error = NSError(domain: "HealthKitManager", code: 3, userInfo: [NSLocalizedDescriptionKey: "Cannot access HealthKit data"])
             completion(nil, error)
             return
         }
-
-        let firstDayOfYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
-        let lastDayOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
-
-        let predicate = HKQuery.predicateForSamples(withStart: firstDayOfYear, end: lastDayOfYear, options: .strictStartDate)
-
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         let query = HKStatisticsQuery(quantityType: activityDistanceType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
             guard let sum = result?.sumQuantity() else {
                 completion(nil, error)
@@ -67,7 +62,6 @@ class HealthKitManager {
         let firstDayOfWeek = calendar.date(from: dateComponents)!
         let lastDayOfWeek = calendar.date(byAdding: .weekOfYear, value: 1, to: firstDayOfWeek)!
 
-        print("for week")
         fetchMilesForRange(for: activityType, startDate: firstDayOfWeek, endDate: lastDayOfWeek, completion: completion)
     }
     
@@ -76,7 +70,6 @@ class HealthKitManager {
         let firstDayOfMonth = calendar.date(from: dateComponents)!
         let lastDayOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: firstDayOfMonth)!
 
-        print("for month")
         fetchMilesForRange(for: activityType, startDate: firstDayOfMonth, endDate: lastDayOfMonth, completion: completion)
     }
 
@@ -84,7 +77,6 @@ class HealthKitManager {
         let firstDayOfYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
         let lastDayOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
 
-        print("for year")
         fetchMilesForRange(for: activityType, startDate: firstDayOfYear, endDate: lastDayOfYear, completion:completion)
     }
 
