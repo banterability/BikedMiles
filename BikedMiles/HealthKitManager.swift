@@ -58,26 +58,28 @@ class HealthKitManager {
 
     }
     func fetchMilesForWeek(for activityType: HKQuantityTypeIdentifier, year: Int, month: Int, day: Int, completion: @escaping (Double?, Error?) -> Void){
-        let dateComponents = DateComponents(year: year, month: month, day: day)
-        let firstDayOfWeek = calendar.date(from: dateComponents)!
-        let lastDayOfWeek = calendar.date(byAdding: .weekOfYear, value: 1, to: firstDayOfWeek)!
+        let today = calendar.date(from: DateComponents(year: year, month: month, day: day))!
+        let firstDayOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
+        let lastSecondOfWeek = calendar.date(byAdding: DateComponents(day: 6, hour: 23, minute: 59, second: 59), to: firstDayOfWeek)!
 
-        fetchMilesForRange(for: activityType, startDate: firstDayOfWeek, endDate: lastDayOfWeek, completion: completion)
+        fetchMilesForRange(for: activityType, startDate: firstDayOfWeek, endDate: lastSecondOfWeek, completion: completion)
     }
     
     func fetchMilesForMonth(for activityType: HKQuantityTypeIdentifier, year: Int, month: Int, completion: @escaping (Double?, Error?) -> Void){
         let dateComponents = DateComponents(year: year, month: month)
         let firstDayOfMonth = calendar.date(from: dateComponents)!
         let lastDayOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: firstDayOfMonth)!
+        let lastSecondOfMonth = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: lastDayOfMonth)!
 
-        fetchMilesForRange(for: activityType, startDate: firstDayOfMonth, endDate: lastDayOfMonth, completion: completion)
+        fetchMilesForRange(for: activityType, startDate: firstDayOfMonth, endDate: lastSecondOfMonth, completion: completion)
     }
 
     func fetchMilesForYear(for activityType: HKQuantityTypeIdentifier, year: Int, completion: @escaping (Double?, Error?) -> Void) {
         let firstDayOfYear = calendar.date(from: DateComponents(year: year, month: 1, day: 1))!
         let lastDayOfYear = calendar.date(from: DateComponents(year: year, month: 12, day: 31))!
+        let lastSecondOfYear = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: lastDayOfYear)!
 
-        fetchMilesForRange(for: activityType, startDate: firstDayOfYear, endDate: lastDayOfYear, completion:completion)
+        fetchMilesForRange(for: activityType, startDate: firstDayOfYear, endDate: lastSecondOfYear, completion:completion)
     }
 
     func fetchMilesByBikeForYear(year: Int, completion: @escaping (Double?, Error?) -> Void) {
