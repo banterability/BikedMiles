@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,11 +15,23 @@
 		AFDDB4D1C87E4A8792407573 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F77F204B168B40218F2644BF /* Sentry */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		1F9A9B6B2D580A17006FF330 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FC1CD412B462BE400FF71B0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FC1CD482B462BE400FF71B0;
+			remoteInfo = BikedMiles;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1F1409FE2B801A0400CFF517 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1F5A22382B6DA5B70070E519 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F6DE1E82BA25622000F2CDF /* DateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelpers.swift; sourceTree = "<group>"; };
 		1F7ACF632B801B3000A6C587 /* BikedMiles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BikedMiles.entitlements; sourceTree = "<group>"; };
+		1F9A9B672D580A17006FF330 /* BikedMilesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BikedMilesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F9A9B722D580B83006FF330 /* BikedMiles.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = BikedMiles.xctestplan; sourceTree = "<group>"; };
 		1FC1CD492B462BE400FF71B0 /* BikedMiles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikedMiles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FC1CD4C2B462BE400FF71B0 /* BikedMilesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikedMilesApp.swift; sourceTree = "<group>"; };
 		1FC1CD4E2B462BE400FF71B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -27,7 +39,18 @@
 		1FC1CD5C2B462DA100FF71B0 /* BikedMilesDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BikedMilesDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1F9A9B682D580A17006FF330 /* BikedMilesTest */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BikedMilesTest; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		1F9A9B642D580A17006FF330 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FC1CD462B462BE400FF71B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,8 +65,10 @@
 		1FC1CD402B462BE400FF71B0 = {
 			isa = PBXGroup;
 			children = (
+				1F9A9B722D580B83006FF330 /* BikedMiles.xctestplan */,
 				1F5A22382B6DA5B70070E519 /* Assets.xcassets */,
 				1FC1CD4B2B462BE400FF71B0 /* BikedMiles */,
+				1F9A9B682D580A17006FF330 /* BikedMilesTest */,
 				1FC1CD4A2B462BE400FF71B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -52,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				1FC1CD492B462BE400FF71B0 /* BikedMiles.app */,
+				1F9A9B672D580A17006FF330 /* BikedMilesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,6 +99,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1F9A9B662D580A17006FF330 /* BikedMilesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F9A9B6D2D580A17006FF330 /* Build configuration list for PBXNativeTarget "BikedMilesTests" */;
+			buildPhases = (
+				1F9A9B632D580A17006FF330 /* Sources */,
+				1F9A9B642D580A17006FF330 /* Frameworks */,
+				1F9A9B652D580A17006FF330 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1F9A9B6C2D580A17006FF330 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1F9A9B682D580A17006FF330 /* BikedMilesTest */,
+			);
+			name = BikedMilesTests;
+			packageProductDependencies = (
+			);
+			productName = BikedMilesTest;
+			productReference = 1F9A9B672D580A17006FF330 /* BikedMilesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		1FC1CD482B462BE400FF71B0 /* BikedMiles */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FC1CD572B462BE400FF71B0 /* Build configuration list for PBXNativeTarget "BikedMiles" */;
@@ -80,8 +129,6 @@
 				1FC1CD452B462BE400FF71B0 /* Sources */,
 				1FC1CD462B462BE400FF71B0 /* Frameworks */,
 				1FC1CD472B462BE400FF71B0 /* Resources */,
-				CDB6DB2062554639A4AEF145 /* Upload Debug Symbols to Sentry */,
-				5B1F45D653D743E4BD612BB0 /* Upload Debug Symbols to Sentry */,
 				2003390A387145B1852330CF /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
@@ -103,9 +150,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1510;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1510;
 				TargetAttributes = {
+					1F9A9B662D580A17006FF330 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 1FC1CD482B462BE400FF71B0;
+					};
 					1FC1CD482B462BE400FF71B0 = {
 						CreatedOnToolsVersion = 15.1;
 					};
@@ -128,11 +179,19 @@
 			projectRoot = "";
 			targets = (
 				1FC1CD482B462BE400FF71B0 /* BikedMiles */,
+				1F9A9B662D580A17006FF330 /* BikedMilesTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1F9A9B652D580A17006FF330 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FC1CD472B462BE400FF71B0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -149,19 +208,26 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Sentry";
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
 			);
+			name = "Upload Debug Symbols to Sentry";
 			outputPaths = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script is responsable to upload debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\nexport SENTRY_ORG=banterability\nexport SENTRY_PROJECT=biked-miles\nERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1F9A9B632D580A17006FF330 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FC1CD452B462BE400FF71B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -175,7 +241,53 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		1F9A9B6C2D580A17006FF330 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FC1CD482B462BE400FF71B0 /* BikedMiles */;
+			targetProxy = 1F9A9B6B2D580A17006FF330 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		1F9A9B6E2D580A17006FF330 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WDXV4YE775;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.banterability.BikedMilesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikedMiles.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BikedMiles";
+			};
+			name = Debug;
+		};
+		1F9A9B6F2D580A17006FF330 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WDXV4YE775;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.banterability.BikedMilesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikedMiles.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BikedMiles";
+			};
+			name = Release;
+		};
 		1FC1CD552B462BE400FF71B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -305,6 +417,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Miles Biked";
@@ -332,7 +445,6 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Debug;
 		};
@@ -346,6 +458,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WDXV4YE775;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BikedMiles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Miles Biked";
@@ -373,13 +486,21 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1F9A9B6D2D580A17006FF330 /* Build configuration list for PBXNativeTarget "BikedMilesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F9A9B6E2D580A17006FF330 /* Debug */,
+				1F9A9B6F2D580A17006FF330 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1FC1CD442B462BE400FF71B0 /* Build configuration list for PBXProject "BikedMiles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

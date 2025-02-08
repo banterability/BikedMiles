@@ -1,0 +1,44 @@
+{
+  "configurations" : [
+    {
+      "id" : "D94EC984-438C-452C-8E3D-52BA680FF247",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BikedMiles.xcodeproj",
+      "identifier" : "1FC1CD482B462BE400FF71B0",
+      "name" : "BikedMiles"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BikedMiles.xcodeproj",
+        "identifier" : "1F9A9B662D580A17006FF330",
+        "name" : "BikedMilesTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "BikedMilesTest"
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:BikedMiles.xcodeproj",
+        "identifier" : "1F9A9B662D580A17006FF330",
+        "name" : "BikedMilesTests"
+      }
+    }
+  ],
+  "version" : 1
+}
