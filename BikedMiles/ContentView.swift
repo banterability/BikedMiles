@@ -62,52 +62,74 @@ struct StatCard: View {
             // Values and trend indicator
             HStack(alignment: .center) {
                 // Last period value (left aligned)
-                Text("\(formatMiles(lastValue)) mi")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("\(formatMiles(lastValue))")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text("miles")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 // Trend indicator (centered)
                 if lastValue > 0 {
-                    HStack(spacing: 2) {
-                        getTrendIcon(lastValue: lastValue, currentValue: currentValue)
-                        Text(formattedPercentChange)
-                            .font(.caption)
-                            .foregroundColor(
-                                currentValue > lastValue ? .green :
-                                currentValue < lastValue ? .red : .gray
-                            )
+                    VStack {
+                        HStack(spacing: 2) {
+                            getTrendIcon(lastValue: lastValue, currentValue: currentValue)
+                            Text(formattedPercentChange)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(
+                                    currentValue > lastValue ? .green :
+                                    currentValue < lastValue ? .red : .gray
+                                )
+                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(currentValue > lastValue ? .systemGreen : currentValue < lastValue ? .systemRed : .systemGray5).opacity(0.2))
+                    )
                 } else {
                     Spacer()
                         .frame(maxWidth: .infinity)
                 }
                 
                 // Current period value (right aligned)
-                Text("\(formatMiles(currentValue)) mi")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text("\(formatMiles(currentValue))")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text("miles")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 16)
                 .fill(Color(.secondarySystemBackground))
+                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         )
     }
     
     private func getTrendIcon(lastValue: Double, currentValue: Double) -> some View {
         if currentValue > lastValue {
-            return Image(systemName: "arrow.up")
+            return Image(systemName: "arrow.up.circle.fill")
                 .foregroundColor(.green)
+                .font(.caption)
         } else if currentValue < lastValue {
-            return Image(systemName: "arrow.down")
+            return Image(systemName: "arrow.down.circle.fill")
                 .foregroundColor(.red)
+                .font(.caption)
         } else {
-            return Image(systemName: "arrow.forward")
+            return Image(systemName: "equal.circle.fill")
                 .foregroundColor(.gray)
+                .font(.caption)
         }
     }
 }
@@ -138,9 +160,14 @@ struct ContentView: View {
         // Wrap the entire view in withAnimation for state changes
         VStack {
             HStack {
-                Text("🚴‍♀️ Miles by Bike")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                HStack(spacing: 8) {
+                    Text("🚴‍♀️")
+                        .font(.largeTitle)
+                    Text("Miles by Bike")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                }
+                .padding(.leading, 4)
                 
                 Spacer()
                 
@@ -152,15 +179,21 @@ struct ContentView: View {
                         SpinnerView()
                             .frame(width: 24, height: 24)
                     } else {
-                        Image(systemName: "arrow.clockwise")
+                        Image(systemName: "arrow.clockwise.circle.fill")
                             .font(.title2)
                             .foregroundColor(.blue)
+                            .imageScale(.large)
                     }
                 }
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
                 .disabled(isLoading)
-                .padding(.trailing)
+                .padding(8)
+                .background(Color.blue.opacity(0.1))
+                .clipShape(Circle())
+                .padding(.trailing, 4)
             }
-            .padding(.top, 30)
+            .padding(.top, 25)
             .padding(.horizontal)
             .padding(.bottom, 10)
 
@@ -169,7 +202,7 @@ struct ContentView: View {
                     Spacer()
                     VStack(spacing: 16) {
                         SpinnerView()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 50, height: 50)
                         
                         Text("Loading your cycling data...")
                             .font(.headline)
@@ -184,7 +217,11 @@ struct ContentView: View {
                         RefreshControl(coordinateSpaceName: "pullToRefresh", onRefresh: fetchMilesData)
                             .padding(.top, -50)
                         
-                        VStack(spacing: 25) {
+                        VStack(spacing: 20) {
+                            // Total Distance Card
+                            totalDistanceCard()
+                                .padding(.bottom, 5)
+                            
                             // Weekly Stats
                             StatCard(
                                 title: "Weekly Stats",
@@ -236,15 +273,66 @@ struct ContentView: View {
                 }
             } else {
                 Spacer()
-                Text("Unable to access HealthKit")
-                    .font(.headline)
-                    .foregroundColor(.red)
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.largeTitle)
+                VStack(spacing: 20) {
+                    Image(systemName: "bolt.slash.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.orange)
+                        .padding()
+                    
+                    Text("Access Required")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text("BikedMiles needs permission to access your Health data")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "1.circle.fill")
+                                .foregroundColor(.blue)
+                            Text("Open the Settings app on your device")
+                        }
+                        
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "2.circle.fill")
+                                .foregroundColor(.blue)
+                            Text("Tap Privacy & Security → Health")
+                        }
+                        
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "3.circle.fill")
+                                .foregroundColor(.blue)
+                            Text("Find and tap BikedMiles in the list")
+                        }
+                        
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "4.circle.fill")
+                                .foregroundColor(.blue)
+                            Text("Enable access to your cycling distance data")
+                        }
+                    }
                     .padding()
-                Text("Please grant BikedMiles access to HealthKit data in your device settings.")
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(.secondarySystemBackground))
+                    )
+                    
+                    Button(action: {
+                        fetchMilesData()
+                    }) {
+                        Text("Try Again")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 30)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top, 12)
+                }
+                .padding()
                 Spacer()
             }
         }
@@ -387,22 +475,107 @@ struct ContentView: View {
         components.day = day
         return Calendar.current.date(from: components) ?? Date()
     }
+    
+    // Total distance card showing the current year's total
+    private func totalDistanceCard() -> some View {
+        let thisYearMiles = milesBiked["thisYear"] ?? 0
+        
+        return VStack(alignment: .center, spacing: 10) {
+            Text("Total Distance \(dateRanges["thisYear"] ?? "")")
+                .font(.headline)
+                .fontWeight(.bold)
+            
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                Text(numberFormatter.string(from: NSNumber(value: thisYearMiles)) ?? "0")
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .foregroundColor(.blue)
+                    .padding(.trailing, 4)
+                
+                Text("miles")
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+            }
+            
+            HStack(spacing: 16) {
+                VStack {
+                    HStack(alignment: .lastTextBaseline, spacing: 2) {
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisWeek"] ?? 0)) ?? "0")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        
+                        Text("mi")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Text("This Week")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
+                
+                VStack {
+                    HStack(alignment: .lastTextBaseline, spacing: 2) {
+                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisMonth"] ?? 0)) ?? "0")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            
+                        Text("mi")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Text("This Month")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+        )
+    }
 }
 
 // Custom spinner view with continuous rotation animation
 struct SpinnerView: View {
     @State private var isAnimating = false
+    @State private var trimEnd: CGFloat = 0.75
     
     var body: some View {
-        Circle()
-            .trim(from: 0.0, to: 0.8)
-            .stroke(Color.blue, lineWidth: 2)
-            .frame(width: 24, height: 24)
-            .rotationEffect(Angle(degrees: isAnimating ? 360 : 0))
-            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating)
-            .onAppear {
+        ZStack {
+            // Background circle
+            Circle()
+                .stroke(Color.blue.opacity(0.2), lineWidth: 3)
+            
+            // Animated arc
+            Circle()
+                .trim(from: 0.0, to: trimEnd)
+                .stroke(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.blue.opacity(0.8), Color.blue]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                )
+                .rotationEffect(Angle(degrees: isAnimating ? 360 : 0))
+        }
+        .onAppear {
+            withAnimation(Animation.linear(duration: 1.5).repeatForever(autoreverses: false)) {
                 isAnimating = true
             }
+            
+            // Pulse the arc length for a more dynamic effect
+            withAnimation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                trimEnd = 0.5
+            }
+        }
     }
 }
 
