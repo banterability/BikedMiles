@@ -63,6 +63,11 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
+            .padding(8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.blue.opacity(0.05))
+            )
             
             Divider()
                 .padding(.vertical, 6)
@@ -74,6 +79,7 @@ struct ThreeWayStatCard: View {
                     Text("\(lastPeriod) (So Far)")
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .foregroundColor(.secondary)
                     
                     Text(equivalentDateRange)
                         .font(.caption2)
@@ -100,6 +106,7 @@ struct ThreeWayStatCard: View {
                     Text("\(lastPeriod)")
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .foregroundColor(.secondary)
                     
                     Text(lastDateRange)
                         .font(.caption2)
@@ -134,11 +141,11 @@ struct ThreeWayStatCard: View {
                                     currentValue < equivalentValue ? .red : .gray
                                 )
                         }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(Color(currentValue > equivalentValue ? .systemGreen : currentValue < equivalentValue ? .systemRed : .systemGray5).opacity(0.2))
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.gray.opacity(0.15))
                         )
                         
                         Text("vs. same period")
@@ -162,11 +169,11 @@ struct ThreeWayStatCard: View {
                                     currentValue < lastValue ? .red : .gray
                                 )
                         }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(Color(currentValue > lastValue ? .systemGreen : currentValue < lastValue ? .systemRed : .systemGray5).opacity(0.2))
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.gray.opacity(0.15))
                         )
                         
                         Text("vs. total")
@@ -175,6 +182,7 @@ struct ThreeWayStatCard: View {
                     }
                 }
             }
+            .padding(.top, 4)
         }
         .padding(12)
         .background(
