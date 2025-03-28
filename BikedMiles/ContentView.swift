@@ -134,15 +134,15 @@ struct ThreeWayStatCard: View {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
                             Text(formatPercentChange(percentChangeFromEquivalent))
-                                .font(.caption2)
+                                .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(
                                     currentValue > equivalentValue ? .green :
                                     currentValue < equivalentValue ? .red : .gray
                                 )
                         }
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(Color(.systemBackground))
@@ -163,15 +163,15 @@ struct ThreeWayStatCard: View {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
                             Text(formatPercentChange(percentChangeFromLast))
-                                .font(.caption2)
+                                .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(
                                     currentValue > lastValue ? .green :
                                     currentValue < lastValue ? .red : .gray
                                 )
                         }
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(Color(.systemBackground))
@@ -198,19 +198,19 @@ struct ThreeWayStatCard: View {
         if baseValue == 0 && comparedValue > 0 {
             return Image(systemName: "arrow.up.circle.fill")
                 .foregroundColor(.green)
-                .font(.caption)
+                .font(.subheadline)
         } else if comparedValue > baseValue {
             return Image(systemName: "arrow.up.circle.fill")
                 .foregroundColor(.green)
-                .font(.caption)
+                .font(.subheadline)
         } else if comparedValue < baseValue {
             return Image(systemName: "arrow.down.circle.fill")
                 .foregroundColor(.red)
-                .font(.caption)
+                .font(.subheadline)
         } else {
             return Image(systemName: "equal.circle.fill")
                 .foregroundColor(.gray)
-                .font(.caption)
+                .font(.subheadline)
         }
     }
 }
