@@ -16,16 +16,19 @@ struct ThreeWayStatCard: View {
     let currentDateRange: String
     
     private var percentChangeFromLast: Double {
-        guard lastValue > 0 else { return 0 }
+        guard lastValue > 0 else { return Double.infinity }
         return ((currentValue - lastValue) / lastValue) * 100
     }
     
     private var percentChangeFromEquivalent: Double {
-        guard equivalentValue > 0 else { return 0 }
+        guard equivalentValue > 0 else { return Double.infinity }
         return ((currentValue - equivalentValue) / equivalentValue) * 100
     }
     
     private func formatPercentChange(_ change: Double) -> String {
+        if change.isInfinite {
+            return "+∞%"
+        }
         let absChange = abs(change)
         let formattedValue = String(format: "%.1f", absChange)
         return "\(change >= 0 ? "+" : "-")\(formattedValue)%"
@@ -126,7 +129,7 @@ struct ThreeWayStatCard: View {
             // Trend indicators - show after current period
             HStack(spacing: 12) {
                 // Trend compared to equivalent period
-                if equivalentValue > 0 {
+                if currentValue > 0 {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
@@ -155,7 +158,7 @@ struct ThreeWayStatCard: View {
                 Spacer()
                 
                 // Trend compared to last full period
-                if lastValue > 0 {
+                if currentValue > 0 {
                     VStack(alignment: .trailing, spacing: 2) {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
@@ -192,7 +195,11 @@ struct ThreeWayStatCard: View {
     }
     
     private func getTrendIcon(baseValue: Double, comparedValue: Double) -> some View {
-        if comparedValue > baseValue {
+        if baseValue == 0 && comparedValue > 0 {
+            return Image(systemName: "arrow.up.circle.fill")
+                .foregroundColor(.green)
+                .font(.caption)
+        } else if comparedValue > baseValue {
             return Image(systemName: "arrow.up.circle.fill")
                 .foregroundColor(.green)
                 .font(.caption)
