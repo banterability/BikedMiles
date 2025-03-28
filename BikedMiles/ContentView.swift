@@ -27,11 +27,11 @@ struct ThreeWayStatCard: View {
     
     private func formatPercentChange(_ change: Double) -> String {
         if change.isInfinite {
-            return "+∞%"
+            return "∞%"
         }
         let absChange = abs(change)
         let formattedValue = String(format: "%.1f", absChange)
-        return "\(change >= 0 ? "+" : "-")\(formattedValue)%"
+        return "\(formattedValue)%"
     }
     
     private func formatMiles(_ value: Double) -> String {
