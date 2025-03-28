@@ -4,7 +4,6 @@
 import SwiftUI
 
 struct StatCard: View {
-    let title: String
     let lastPeriod: String
     let currentPeriod: String
     let lastValue: Double
@@ -220,7 +219,6 @@ struct ContentView: View {
                             
                             // Weekly Stats
                             StatCard(
-                                title: "",
                                 lastPeriod: "Last Week",
                                 currentPeriod: "This Week",
                                 lastValue: milesBiked["lastWeek"] ?? 0,
@@ -235,7 +233,6 @@ struct ContentView: View {
                             
                             // Monthly Stats
                             StatCard(
-                                title: "",
                                 lastPeriod: "Last Month",
                                 currentPeriod: "This Month",
                                 lastValue: milesBiked["lastMonth"] ?? 0,
@@ -250,7 +247,6 @@ struct ContentView: View {
                             
                             // Yearly Stats
                             StatCard(
-                                title: "",
                                 lastPeriod: "Last Year",
                                 currentPeriod: "This Year",
                                 lastValue: milesBiked["lastYear"] ?? 0,
