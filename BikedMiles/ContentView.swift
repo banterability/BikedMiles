@@ -158,7 +158,7 @@ struct ContentView: View {
                 HStack(spacing: 8) {
                     Text("🚴‍♀️")
                         .font(.largeTitle)
-                    Text("Miles by Bike")
+                    Text("Miles Biked")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                 }
