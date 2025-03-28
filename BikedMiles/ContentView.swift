@@ -66,7 +66,8 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.top, 4)
+            .padding(.bottom, 2)
             .padding(.horizontal, 2)
             
             Divider()
