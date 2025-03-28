@@ -29,17 +29,13 @@ struct StatCard: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .font(.headline)
-                .fontWeight(.bold)
-            
+        VStack(alignment: .leading, spacing: 12) {
             // Period labels with date ranges
             HStack {
-                VStack(alignment: .leading, spacing: 1) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text(lastPeriod)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .fontWeight(.medium)
                     
                     Text(lastDateRange)
                         .font(.caption)
@@ -48,10 +44,10 @@ struct StatCard: View {
                 
                 Spacer()
                 
-                VStack(alignment: .trailing, spacing: 1) {
+                VStack(alignment: .trailing, spacing: 0) {
                     Text(currentPeriod)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .fontWeight(.medium)
                     
                     Text(currentDateRange)
                         .font(.caption)
@@ -64,10 +60,10 @@ struct StatCard: View {
                 // Last period value (left aligned)
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(formatMiles(lastValue))")
-                        .font(.title)
+                        .font(.title3)
                         .fontWeight(.bold)
                     Text("miles")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -78,7 +74,7 @@ struct StatCard: View {
                         HStack(spacing: 2) {
                             getTrendIcon(lastValue: lastValue, currentValue: currentValue)
                             Text(formattedPercentChange)
-                                .font(.caption)
+                                .font(.caption2)
                                 .fontWeight(.semibold)
                                 .foregroundColor(
                                     currentValue > lastValue ? .green :
@@ -86,10 +82,10 @@ struct StatCard: View {
                                 )
                         }
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
                     .background(
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: 6)
                             .fill(Color(currentValue > lastValue ? .systemGreen : currentValue < lastValue ? .systemRed : .systemGray5).opacity(0.2))
                     )
                 } else {
@@ -100,20 +96,20 @@ struct StatCard: View {
                 // Current period value (right aligned)
                 VStack(alignment: .trailing, spacing: 0) {
                     Text("\(formatMiles(currentValue))")
-                        .font(.title)
+                        .font(.title3)
                         .fontWeight(.bold)
                     Text("miles")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
-        .padding(16)
+        .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 14)
                 .fill(Color(.secondarySystemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
         )
     }
     
@@ -217,14 +213,14 @@ struct ContentView: View {
                         RefreshControl(coordinateSpaceName: "pullToRefresh", onRefresh: fetchMilesData)
                             .padding(.top, -50)
                         
-                        VStack(spacing: 20) {
+                        VStack(spacing: 14) {
                             // Total Distance Card
                             totalDistanceCard()
-                                .padding(.bottom, 5)
+                                .padding(.bottom, 2)
                             
                             // Weekly Stats
                             StatCard(
-                                title: "Weekly Stats",
+                                title: "",
                                 lastPeriod: "Last Week",
                                 currentPeriod: "This Week",
                                 lastValue: milesBiked["lastWeek"] ?? 0,
@@ -239,7 +235,7 @@ struct ContentView: View {
                             
                             // Monthly Stats
                             StatCard(
-                                title: "Monthly Stats",
+                                title: "",
                                 lastPeriod: "Last Month",
                                 currentPeriod: "This Month",
                                 lastValue: milesBiked["lastMonth"] ?? 0,
@@ -254,7 +250,7 @@ struct ContentView: View {
                             
                             // Yearly Stats
                             StatCard(
-                                title: "Yearly Stats",
+                                title: "",
                                 lastPeriod: "Last Year",
                                 currentPeriod: "This Year",
                                 lastValue: milesBiked["lastYear"] ?? 0,
@@ -480,64 +476,66 @@ struct ContentView: View {
     private func totalDistanceCard() -> some View {
         let thisYearMiles = milesBiked["thisYear"] ?? 0
         
-        return VStack(alignment: .center, spacing: 10) {
+        return VStack(alignment: .center, spacing: 8) {
             Text("Total Distance \(dateRanges["thisYear"] ?? "")")
                 .font(.headline)
                 .fontWeight(.bold)
             
             HStack(alignment: .lastTextBaseline, spacing: 0) {
                 Text(numberFormatter.string(from: NSNumber(value: thisYearMiles)) ?? "0")
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(.system(size: 42, weight: .bold, design: .rounded))
                     .foregroundColor(.blue)
                     .padding(.trailing, 4)
                 
                 Text("miles")
-                    .font(.headline)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             
-            HStack(spacing: 16) {
-                VStack {
+            HStack(spacing: 12) {
+                VStack(spacing: 1) {
                     HStack(alignment: .lastTextBaseline, spacing: 2) {
                         Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisWeek"] ?? 0)) ?? "0")
-                            .font(.title3)
+                            .font(.headline)
                             .fontWeight(.semibold)
                         
                         Text("mi")
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                     Text("This Week")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                .padding(8)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 8)
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
                 
-                VStack {
+                VStack(spacing: 1) {
                     HStack(alignment: .lastTextBaseline, spacing: 2) {
                         Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisMonth"] ?? 0)) ?? "0")
-                            .font(.title3)
+                            .font(.headline)
                             .fontWeight(.semibold)
                             
                         Text("mi")
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                     Text("This Month")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                .padding(8)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 8)
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
             }
         }
-        .padding(16)
+        .padding(12)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 14)
                 .fill(Color(.secondarySystemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
         )
     }
 }
