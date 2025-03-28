@@ -3,6 +3,96 @@
 
 import SwiftUI
 
+struct StatCard: View {
+    let title: String
+    let lastPeriod: String
+    let currentPeriod: String
+    let lastValue: Double
+    let currentValue: Double
+    let formatter: NumberFormatter
+    
+    private var percentChange: Double {
+        guard lastValue > 0 else { return 0 }
+        return ((currentValue - lastValue) / lastValue) * 100
+    }
+    
+    private var formattedPercentChange: String {
+        let absChange = abs(percentChange)
+        let formattedValue = String(format: "%.1f", absChange)
+        return "\(percentChange >= 0 ? "+" : "-")\(formattedValue)%"
+    }
+    
+    private func formatMiles(_ value: Double) -> String {
+        return formatter.string(from: NSNumber(value: value)) ?? "0"
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(title)
+                .font(.headline)
+                .fontWeight(.bold)
+            
+            HStack(alignment: .top, spacing: 20) {
+                // Last period stats
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(lastPeriod)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(formatMiles(lastValue)) mi")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                }
+                
+                Spacer()
+                
+                // Current period stats
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(currentPeriod)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    HStack(alignment: .center, spacing: 4) {
+                        Text("\(formatMiles(currentValue)) mi")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        if lastValue > 0 {
+                            HStack(spacing: 2) {
+                                getTrendIcon(lastValue: lastValue, currentValue: currentValue)
+                                Text(formattedPercentChange)
+                                    .font(.caption)
+                                    .foregroundColor(
+                                        currentValue > lastValue ? .green :
+                                        currentValue < lastValue ? .red : .gray
+                                    )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.secondarySystemBackground))
+        )
+    }
+    
+    private func getTrendIcon(lastValue: Double, currentValue: Double) -> some View {
+        if currentValue > lastValue {
+            return Image(systemName: "arrow.up")
+                .foregroundColor(.green)
+        } else if currentValue < lastValue {
+            return Image(systemName: "arrow.down")
+                .foregroundColor(.red)
+        } else {
+            return Image(systemName: "arrow.forward")
+                .foregroundColor(.gray)
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var milesBiked: [String: Double] = [:]
     @State private var isAuthorized = false
@@ -11,8 +101,8 @@ struct ContentView: View {
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter;
+        formatter.timeStyle = .none
+        return formatter
     }()
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -24,49 +114,62 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Spacer()
-            Text("🚴‍♀️ Miles by Bike").font(.largeTitle).padding([.bottom], 20)
+            Text("🚴‍♀️ Miles by Bike")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top, 30)
+                .padding(.bottom, 20)
 
             if isAuthorized {
-                VStack{
-                    HStack{
-                        Text("Last Week:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastWeek"] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                    HStack {
-                        Text("This Week:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisWeek"] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                }.padding([.bottom], 10)
-                VStack{
-                    HStack{
-                        Text("Last Month:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastMonth"] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                    HStack {
-                        Text("This Month:").font(.subheadline).bold()
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisMonth"] ?? 0))!)
-                        Text("miles")
-                    }.font(.title2)
-                }.padding([.bottom], 10)
-                HStack{
-                    Text("Last Year:").font(.subheadline).bold()
-                    Text(numberFormatter.string(from: NSNumber(value: milesBiked["lastYear"] ?? 0))!)
-                    Text("miles")
-                }.font(.title2)
-                HStack {
-                    Text("This Year:").font(.subheadline).bold()
-                    Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisYear"] ?? 0))!)
-                    Text("miles")
-                }.font(.title2)
+                ScrollView {
+                    VStack(spacing: 25) {
+                        // Weekly Stats
+                        StatCard(
+                            title: "Weekly Stats",
+                            lastPeriod: "Last Week",
+                            currentPeriod: "This Week",
+                            lastValue: milesBiked["lastWeek"] ?? 0,
+                            currentValue: milesBiked["thisWeek"] ?? 0,
+                            formatter: numberFormatter
+                        )
+                        
+                        // Monthly Stats
+                        StatCard(
+                            title: "Monthly Stats",
+                            lastPeriod: "Last Month",
+                            currentPeriod: "This Month",
+                            lastValue: milesBiked["lastMonth"] ?? 0,
+                            currentValue: milesBiked["thisMonth"] ?? 0,
+                            formatter: numberFormatter
+                        )
+                        
+                        // Yearly Stats
+                        StatCard(
+                            title: "Yearly Stats",
+                            lastPeriod: "Last Year",
+                            currentPeriod: "This Year",
+                            lastValue: milesBiked["lastYear"] ?? 0,
+                            currentValue: milesBiked["thisYear"] ?? 0,
+                            formatter: numberFormatter
+                        )
+                    }
+                    .padding()
+                }
             } else {
+                Spacer()
                 Text("Unable to access HealthKit")
+                    .font(.headline)
+                    .foregroundColor(.red)
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.largeTitle)
+                    .padding()
+                Text("Please grant BikedMiles access to HealthKit data in your device settings.")
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                Spacer()
             }
-            Spacer()
         }
+        .background(Color(.systemBackground))
         .onAppear() {
             fetchMilesData()
         }
@@ -84,12 +187,12 @@ struct ContentView: View {
             }
         }
         let currentDate = Date()
-        do{
+        do {
             let (currentMonthYear, currentMonth) = try currentDate.thisMonth()
             let (lastMonthYear, lastMonth) = try currentDate.lastMonth()
             let previousYear = try currentDate.lastYear()
-            let currentWeek = try currentDate.thisWeek();
-            let lastWeek = try currentDate.lastWeek();
+            let currentWeek = try currentDate.thisWeek()
+            let lastWeek = try currentDate.lastWeek()
 
             healthKitManager.fetchMilesByBikeForWeek(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day) { miles, error in self.milesBiked["lastWeek"] = miles}
             healthKitManager.fetchMilesByBikeForWeek(year: currentWeek.year, month: currentWeek.month, day: currentWeek.day) { miles, error in self.milesBiked["thisWeek"] = miles}
@@ -99,7 +202,6 @@ struct ContentView: View {
             healthKitManager.fetchMilesByBikeForYear(year: currentMonthYear) { miles, error in self.milesBiked["thisYear"] = miles}
         } catch {
            print("An error occurred while calculating dates: \(error)")
-
        }
     }
 }
@@ -109,4 +211,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
