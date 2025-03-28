@@ -406,7 +406,7 @@ struct ContentView: View {
             }
             .padding(.top, 20)
             .padding(.horizontal)
-            .padding(.bottom, 4)
+            .padding(.bottom, 0)
 
             if isAuthorized {
                 if isLoading && milesBiked.isEmpty {
