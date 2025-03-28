@@ -74,7 +74,7 @@ struct ThreeWayStatCard: View {
                 .padding(.vertical, 6)
             
             // Last period equivalent value
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 8) {
                 // Title with date range
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(lastPeriod) (So Far)")
@@ -89,6 +89,27 @@ struct ThreeWayStatCard: View {
                 
                 Spacer()
                 
+                // Trend indicator
+                if currentValue > 0 {
+                    HStack(spacing: 2) {
+                        getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
+                        Text(formatPercentChange(percentChangeFromEquivalent))
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(
+                                currentValue > equivalentValue ? .green :
+                                currentValue < equivalentValue ? .red : .gray
+                            )
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
+                    )
+                }
+                
                 // Value
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text("\(formatMiles(equivalentValue))")
@@ -99,9 +120,10 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
+            .padding(.vertical, 2)
             
             // Last period total value
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 8) {
                 // Title with date range
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(lastPeriod)")
@@ -116,6 +138,27 @@ struct ThreeWayStatCard: View {
                 
                 Spacer()
                 
+                // Trend indicator
+                if currentValue > 0 {
+                    HStack(spacing: 2) {
+                        getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
+                        Text(formatPercentChange(percentChangeFromLast))
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(
+                                currentValue > lastValue ? .green :
+                                currentValue < lastValue ? .red : .gray
+                            )
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
+                    )
+                }
+                
                 // Value
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text("\(formatMiles(lastValue))")
@@ -126,66 +169,7 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
-            // Trend indicators - show after current period
-            HStack(spacing: 12) {
-                // Trend compared to equivalent period
-                if currentValue > 0 {
-                    VStack(alignment: .leading, spacing: 2) {
-                        HStack(spacing: 2) {
-                            getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
-                            Text(formatPercentChange(percentChangeFromEquivalent))
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .foregroundColor(
-                                    currentValue > equivalentValue ? .green :
-                                    currentValue < equivalentValue ? .red : .gray
-                                )
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
-                        .background(
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color(.systemBackground))
-                                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
-                        )
-                        
-                        Text("vs. same period")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                Spacer()
-                
-                // Trend compared to last full period
-                if currentValue > 0 {
-                    VStack(alignment: .trailing, spacing: 2) {
-                        HStack(spacing: 2) {
-                            getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
-                            Text(formatPercentChange(percentChangeFromLast))
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .foregroundColor(
-                                    currentValue > lastValue ? .green :
-                                    currentValue < lastValue ? .red : .gray
-                                )
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
-                        .background(
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color(.systemBackground))
-                                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
-                        )
-                        
-                        Text("vs. total")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-            .padding(.top, 4)
+            .padding(.vertical, 2)
         }
         .padding(12)
         .background(
