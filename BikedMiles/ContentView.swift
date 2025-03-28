@@ -42,7 +42,7 @@ struct ThreeWayStatCard: View {
                 // Title with date range
                 VStack(alignment: .leading, spacing: 0) {
                     Text(currentPeriod)
-                        .font(.headline)
+                        .font(.title3)
                         .fontWeight(.bold)
                     
                     Text(currentDateRange)
@@ -55,7 +55,7 @@ struct ThreeWayStatCard: View {
                 // Value
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text("\(formatMiles(currentValue))")
-                        .font(.system(size: 28, weight: .bold))
+                        .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.blue)
                     
                     Text("mi")
@@ -63,12 +63,8 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .padding(8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.systemBackground))
-                    .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1)
-            )
+            .padding(.horizontal, 2)
+            .padding(.bottom, 4)
             
             Divider()
                 .padding(.vertical, 6)
