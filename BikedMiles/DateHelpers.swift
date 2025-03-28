@@ -30,6 +30,31 @@ extension Date {
         return (weekStart, weekEnd, formattedRange)
     }
     
+    // Get partial week date range (Sunday to specified weekday)
+    func partialWeekDateRange(year: Int, month: Int, day: Int, endDay: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        
+        // Create a date from the components
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = day
+        
+        guard let date = calendar.date(from: dateComponents) else { return nil }
+        
+        // Get the start of the week (Sunday)
+        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        guard let weekStart = calendar.date(from: components) else { return nil }
+        
+        // Calculate the number of days to add (0 for Sunday, 1 for Monday, etc.)
+        let daysToAdd = min(endDay, 6) // Cap at 6 (Saturday)
+        
+        guard let partialWeekEnd = calendar.date(byAdding: .day, value: daysToAdd, to: weekStart) else { return nil }
+        
+        let formattedRange = formatDateRange(from: weekStart, to: partialWeekEnd)
+        return (weekStart, partialWeekEnd, formattedRange)
+    }
+    
     // Get month date range
     func monthDateRange(year: Int, month: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
         let calendar = Calendar.current
@@ -49,6 +74,37 @@ extension Date {
         return (monthStart, monthEnd, formattedMonth)
     }
     
+    // Get partial month date range (1st to current day)
+    func partialMonthDateRange(year: Int, month: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        let currentDate = self
+        
+        // Create the start date (1st of the month)
+        var startComponents = DateComponents()
+        startComponents.year = year
+        startComponents.month = month
+        startComponents.day = 1
+        
+        guard let monthStart = calendar.date(from: startComponents) else { return nil }
+        
+        // For the current month, end date is today
+        // For other months, calculate what day of the month corresponds to today
+        var endComponents = calendar.dateComponents([.day], from: currentDate)
+        let endDay = endComponents.day ?? 1
+        
+        endComponents.year = year
+        endComponents.month = month
+        endComponents.day = min(endDay, calendar.range(of: .day, in: .month, for: monthStart)?.count ?? 28)
+        endComponents.hour = 23
+        endComponents.minute = 59
+        endComponents.second = 59
+        
+        guard let endDate = calendar.date(from: endComponents) else { return nil }
+        
+        let formattedRange = formatDateRange(from: monthStart, to: endDate)
+        return (monthStart, endDate, formattedRange)
+    }
+    
     // Get year date range
     func yearDateRange(year: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
         let calendar = Calendar.current
@@ -66,6 +122,54 @@ extension Date {
         let formattedYear = formatter.string(from: yearStart)
         
         return (yearStart, yearEnd, formattedYear)
+    }
+    
+    // Get partial year date range (Jan 1 to current month/day)
+    func partialYearDateRange(year: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        let currentDate = self
+        
+        // Create the start date (January 1)
+        var startComponents = DateComponents()
+        startComponents.year = year
+        startComponents.month = 1
+        startComponents.day = 1
+        
+        guard let yearStart = calendar.date(from: startComponents) else { return nil }
+        
+        // Get current month and day (e.g., March 28)
+        let currentMonth = calendar.component(.month, from: currentDate)
+        let currentDay = calendar.component(.day, from: currentDate)
+        
+        // Create the equivalent date in the specified year (same month and day)
+        var endComponents = DateComponents()
+        endComponents.year = year
+        endComponents.month = currentMonth
+        endComponents.day = currentDay
+        endComponents.hour = 23
+        endComponents.minute = 59
+        endComponents.second = 59
+        
+        // Handle February 29 in non-leap years
+        if currentMonth == 2 && currentDay == 29 {
+            // Check if the specified year is a leap year
+            var testComponents = DateComponents()
+            testComponents.year = year
+            testComponents.month = 2
+            testComponents.day = 29
+            
+            if calendar.date(from: testComponents) == nil {
+                endComponents.day = 28 // Use February 28 in non-leap years
+            }
+        }
+        
+        guard let endDate = calendar.date(from: endComponents) else { return nil }
+        
+        // Format the date range
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        let endFormatted = formatter.string(from: endDate)
+        return (yearStart, endDate, "Jan 1-\(endFormatted)")
     }
     
     func thisWeek() throws -> (year: Int, month: Int, day: Int) {
@@ -137,5 +241,11 @@ extension Date {
             throw DateError.calculationError
         }
         return calendar.component(.year, from: lastYearDate)
+    }
+    
+    // Get the current day of the month
+    func currentDayOfMonth() -> Int {
+        let calendar = Calendar.current
+        return calendar.component(.day, from: self)
     }
 }

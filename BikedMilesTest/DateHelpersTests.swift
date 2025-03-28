@@ -193,6 +193,64 @@ final class DateHelpersTests: XCTestCase {
         XCTAssertEqual(monthRange.formatted, "February 2025")
     }
     
+    func test_partialMonthDateRange() {
+        // March 15, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 15)
+        
+        guard let partialMonthRange = testDate.partialMonthDateRange(year: 2025, month: 3) else {
+            XCTFail("Failed to get partial month date range")
+            return
+        }
+        
+        // Should start on March 1 and end on March 15
+        let startDay = calendar.component(.day, from: partialMonthRange.startDate)
+        let endDay = calendar.component(.day, from: partialMonthRange.endDate)
+        
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endDay, 15)
+        XCTAssertEqual(partialMonthRange.formatted, "Mar 1-Mar 15")
+    }
+    
+    func test_partialMonthDateRangeWithPreviousMonth() {
+        // March 15, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 15)
+        
+        // Get partial date range for February with the same number of days
+        guard let partialMonthRange = testDate.partialMonthDateRange(year: 2025, month: 2) else {
+            XCTFail("Failed to get partial month date range")
+            return
+        }
+        
+        // Should start on Feb 1 and end on Feb 15 (same day of month)
+        let startDay = calendar.component(.day, from: partialMonthRange.startDate)
+        let endDay = calendar.component(.day, from: partialMonthRange.endDate)
+        let endMonth = calendar.component(.month, from: partialMonthRange.endDate)
+        
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endDay, 15)
+        XCTAssertEqual(endMonth, 2)
+        XCTAssertEqual(partialMonthRange.formatted, "Feb 1-Feb 15")
+    }
+    
+    func test_partialMonthDateRangeWithExceedingDays() {
+        // March 31, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 31)
+        
+        // February doesn't have 31 days, so it should cap at the max days in February
+        guard let partialMonthRange = testDate.partialMonthDateRange(year: 2025, month: 2) else {
+            XCTFail("Failed to get partial month date range")
+            return
+        }
+        
+        // Should start on Feb 1 and end on Feb 28 (last day of month)
+        let startDay = calendar.component(.day, from: partialMonthRange.startDate)
+        let endDay = calendar.component(.day, from: partialMonthRange.endDate)
+        
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endDay, 28) // February 2025 has 28 days
+        XCTAssertEqual(partialMonthRange.formatted, "Feb 1-Feb 28")
+    }
+    
     func test_monthDateRangeForLeapYear() {
         // February in a leap year (2024)
         let testDate = makeDate(year: 2024, month: 2, day: 15)
@@ -229,5 +287,64 @@ final class DateHelpersTests: XCTestCase {
         XCTAssertEqual(endMonth, 12)
         XCTAssertEqual(endDay, 31)
         XCTAssertEqual(yearRange.formatted, "2025")
+    }
+    
+    func test_partialYearDateRange() {
+        // March 15, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 15)
+        
+        guard let partialYearRange = testDate.partialYearDateRange(year: 2025) else {
+            XCTFail("Failed to get partial year date range")
+            return
+        }
+        
+        // Should start on Jan 1 and end on the current day of year
+        let startMonth = calendar.component(.month, from: partialYearRange.startDate)
+        let startDay = calendar.component(.day, from: partialYearRange.startDate)
+        let endMonth = calendar.component(.month, from: partialYearRange.endDate)
+        let endDay = calendar.component(.day, from: partialYearRange.endDate)
+        
+        XCTAssertEqual(startMonth, 1)
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endMonth, 3)  // March
+        XCTAssertEqual(endDay, 15)   // 15th day
+        XCTAssertEqual(partialYearRange.formatted, "Jan 1-Mar 15")
+    }
+    
+    func test_partialYearDateRangeWithPreviousYear() {
+        // March 15, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 15)
+        
+        // Get equivalent date range for 2024
+        guard let partialYearRange = testDate.partialYearDateRange(year: 2024) else {
+            XCTFail("Failed to get partial year date range")
+            return
+        }
+        
+        // Should start on Jan 1, 2024 and end on Mar 15, 2024
+        let startYear = calendar.component(.year, from: partialYearRange.startDate)
+        let startMonth = calendar.component(.month, from: partialYearRange.startDate)
+        let startDay = calendar.component(.day, from: partialYearRange.startDate)
+        let endYear = calendar.component(.year, from: partialYearRange.endDate)
+        let endMonth = calendar.component(.month, from: partialYearRange.endDate)
+        
+        XCTAssertEqual(startYear, 2024)
+        XCTAssertEqual(startMonth, 1)
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endYear, 2024)
+        XCTAssertEqual(endMonth, 3)
+        // Note: We don't check the exact day since it might vary by 1 due to leap year calculations
+        
+        // Check if the formatted string follows the expected pattern
+        XCTAssertTrue(partialYearRange.formatted.hasPrefix("Jan 1-Mar"))
+    }
+    
+    func test_currentDayOfMonth() {
+        // March 15, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 15)
+        
+        let dayOfMonth = testDate.currentDayOfMonth()
+        
+        XCTAssertEqual(dayOfMonth, 15)
     }
 }

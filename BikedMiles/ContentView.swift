@@ -3,6 +3,205 @@
 
 import SwiftUI
 
+struct ThreeWayStatCard: View {
+    let lastPeriod: String
+    let equivalentPeriod: String
+    let currentPeriod: String
+    let lastValue: Double
+    let equivalentValue: Double
+    let currentValue: Double
+    let formatter: NumberFormatter
+    let lastDateRange: String
+    let equivalentDateRange: String
+    let currentDateRange: String
+    
+    private var percentChangeFromLast: Double {
+        guard lastValue > 0 else { return 0 }
+        return ((currentValue - lastValue) / lastValue) * 100
+    }
+    
+    private var percentChangeFromEquivalent: Double {
+        guard equivalentValue > 0 else { return 0 }
+        return ((currentValue - equivalentValue) / equivalentValue) * 100
+    }
+    
+    private func formatPercentChange(_ change: Double) -> String {
+        let absChange = abs(change)
+        let formattedValue = String(format: "%.1f", absChange)
+        return "\(change >= 0 ? "+" : "-")\(formattedValue)%"
+    }
+    
+    private func formatMiles(_ value: Double) -> String {
+        return formatter.string(from: NSNumber(value: value)) ?? "0"
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Current period value - larger
+            HStack(alignment: .center) {
+                // Title with date range
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(currentPeriod)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    
+                    Text(currentDateRange)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                // Value
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text("\(formatMiles(currentValue))")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(.blue)
+                    
+                    Text("mi")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            Divider()
+                .padding(.vertical, 6)
+            
+            // Last period equivalent value
+            HStack(alignment: .center) {
+                // Title with date range
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("\(lastPeriod) (So Far)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    
+                    Text(equivalentDateRange)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                // Value
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text("\(formatMiles(equivalentValue))")
+                        .font(.system(size: 18, weight: .semibold))
+                    
+                    Text("mi")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            // Last period total value
+            HStack(alignment: .center) {
+                // Title with date range
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("\(lastPeriod)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    
+                    Text(lastDateRange)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                // Value
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text("\(formatMiles(lastValue))")
+                        .font(.system(size: 18, weight: .semibold))
+                    
+                    Text("mi")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            // Trend indicators - show after current period
+            HStack(spacing: 12) {
+                // Trend compared to equivalent period
+                if equivalentValue > 0 {
+                    HStack(spacing: 4) {
+                        HStack(spacing: 2) {
+                            getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
+                            Text(formatPercentChange(percentChangeFromEquivalent))
+                                .font(.caption2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(
+                                    currentValue > equivalentValue ? .green :
+                                    currentValue < equivalentValue ? .red : .gray
+                                )
+                        }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(currentValue > equivalentValue ? .systemGreen : currentValue < equivalentValue ? .systemRed : .systemGray5).opacity(0.2))
+                        )
+                        
+                        Text("vs. same period")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                Spacer()
+                
+                // Trend compared to last full period
+                if lastValue > 0 {
+                    HStack(spacing: 4) {
+                        HStack(spacing: 2) {
+                            getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
+                            Text(formatPercentChange(percentChangeFromLast))
+                                .font(.caption2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(
+                                    currentValue > lastValue ? .green :
+                                    currentValue < lastValue ? .red : .gray
+                                )
+                        }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(currentValue > lastValue ? .systemGreen : currentValue < lastValue ? .systemRed : .systemGray5).opacity(0.2))
+                        )
+                        
+                        Text("vs. total")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
+        )
+    }
+    
+    private func getTrendIcon(baseValue: Double, comparedValue: Double) -> some View {
+        if comparedValue > baseValue {
+            return Image(systemName: "arrow.up.circle.fill")
+                .foregroundColor(.green)
+                .font(.caption)
+        } else if comparedValue < baseValue {
+            return Image(systemName: "arrow.down.circle.fill")
+                .foregroundColor(.red)
+                .font(.caption)
+        } else {
+            return Image(systemName: "equal.circle.fill")
+                .foregroundColor(.gray)
+                .font(.caption)
+        }
+    }
+}
+
+// Keep the original StatCard for backward compatibility
 struct StatCard: View {
     let lastPeriod: String
     let currentPeriod: String
@@ -102,6 +301,19 @@ struct StatCard: View {
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            // "Equivalent time periods" note
+            if currentDateRange.contains("-") && lastDateRange.contains("-") {
+                HStack {
+                    Spacer()
+                    Text("Comparing equivalent time periods")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .italic()
+                    Spacer()
+                }
+                .padding(.top, 2)
             }
         }
         .padding(12)
@@ -210,51 +422,56 @@ struct ContentView: View {
                             .padding(.top, -50)
                         
                         VStack(spacing: 14) {
-                            // Total Distance Card
-                            totalDistanceCard()
-                                .padding(.bottom, 2)
-                            
-                            // Weekly Stats
-                            StatCard(
+                            // Weekly Stats with Three-Way Comparison
+                            ThreeWayStatCard(
                                 lastPeriod: "Last Week",
+                                equivalentPeriod: "This Time Last Week",
                                 currentPeriod: "This Week",
-                                lastValue: milesBiked["lastWeek"] ?? 0,
+                                lastValue: milesBiked["lastWeekFull"] ?? 0,
+                                equivalentValue: milesBiked["lastWeekPartial"] ?? 0,
                                 currentValue: milesBiked["thisWeek"] ?? 0,
                                 formatter: numberFormatter,
-                                lastDateRange: dateRanges["lastWeek"] ?? "",
+                                lastDateRange: dateRanges["lastWeekFull"] ?? "",
+                                equivalentDateRange: dateRanges["lastWeekPartial"] ?? "",
                                 currentDateRange: dateRanges["thisWeek"] ?? ""
                             )
-                            .id(milesBiked["lastWeek"])
+                            .id(milesBiked["thisWeek"])
                             .transition(.opacity)
-                            .animation(.easeIn, value: milesBiked["lastWeek"])
+                            .animation(.easeIn, value: milesBiked["thisWeek"])
                             
-                            // Monthly Stats
-                            StatCard(
+                            // Monthly Stats with Three-Way Comparison
+                            ThreeWayStatCard(
                                 lastPeriod: "Last Month",
+                                equivalentPeriod: "This Time Last Month",
                                 currentPeriod: "This Month",
-                                lastValue: milesBiked["lastMonth"] ?? 0,
+                                lastValue: milesBiked["lastMonthFull"] ?? 0,
+                                equivalentValue: milesBiked["lastMonthPartial"] ?? 0,
                                 currentValue: milesBiked["thisMonth"] ?? 0,
                                 formatter: numberFormatter,
-                                lastDateRange: dateRanges["lastMonth"] ?? "",
+                                lastDateRange: dateRanges["lastMonthFull"] ?? "",
+                                equivalentDateRange: dateRanges["lastMonthPartial"] ?? "",
                                 currentDateRange: dateRanges["thisMonth"] ?? ""
                             )
-                            .id(milesBiked["lastMonth"])
+                            .id(milesBiked["thisMonth"])
                             .transition(.opacity)
-                            .animation(.easeIn, value: milesBiked["lastMonth"])
+                            .animation(.easeIn, value: milesBiked["thisMonth"])
                             
-                            // Yearly Stats
-                            StatCard(
+                            // Yearly Stats with Three-Way Comparison
+                            ThreeWayStatCard(
                                 lastPeriod: "Last Year",
+                                equivalentPeriod: "This Time Last Year",
                                 currentPeriod: "This Year",
-                                lastValue: milesBiked["lastYear"] ?? 0,
+                                lastValue: milesBiked["lastYearFull"] ?? 0,
+                                equivalentValue: milesBiked["lastYearPartial"] ?? 0,
                                 currentValue: milesBiked["thisYear"] ?? 0,
                                 formatter: numberFormatter,
-                                lastDateRange: dateRanges["lastYear"] ?? "",
+                                lastDateRange: dateRanges["lastYearFull"] ?? "",
+                                equivalentDateRange: dateRanges["lastYearPartial"] ?? "",
                                 currentDateRange: dateRanges["thisYear"] ?? ""
                             )
-                            .id(milesBiked["lastYear"])
+                            .id(milesBiked["thisYear"])
                             .transition(.opacity)
-                            .animation(.easeIn, value: milesBiked["lastYear"])
+                            .animation(.easeIn, value: milesBiked["thisYear"])
                         }
                         .padding()
                     }
@@ -360,79 +577,183 @@ struct ContentView: View {
             let currentWeek = try currentDate.thisWeek()
             let lastWeek = try currentDate.lastWeek()
             
-            // Set date ranges for UI display
+            // Get the current day of month and day of year for equivalent comparisons
+            let currentDayOfMonth = currentDate.currentDayOfMonth()
+            let calendar = Calendar.current
+            let currentDayOfYear = calendar.ordinality(of: .day, in: .year, for: currentDate) ?? 1
+            let currentDayOfWeek = calendar.component(.weekday, from: currentDate) - 1 // 0 = Sunday, 6 = Saturday
+            
+            // Current week - full week range
             if let currentWeekRange = currentDate.weekDateRange(startingFrom: createDate(year: currentWeek.year, month: currentWeek.month, day: currentWeek.day)) {
-                self.dateRanges["thisWeek"] = currentWeekRange.formatted
+                self.dateRanges["thisWeekFull"] = currentWeekRange.formatted
             }
             
+            // Current week - partial range (Sunday to current day)
+            if let currentWeekPartialRange = currentDate.partialWeekDateRange(year: currentWeek.year, month: currentWeek.month, day: currentWeek.day, endDay: currentDayOfWeek) {
+                self.dateRanges["thisWeek"] = currentWeekPartialRange.formatted
+            }
+            
+            // Last week - full week range
             if let lastWeekRange = currentDate.weekDateRange(startingFrom: createDate(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day)) {
-                self.dateRanges["lastWeek"] = lastWeekRange.formatted
+                self.dateRanges["lastWeekFull"] = lastWeekRange.formatted
             }
             
+            // Last week - equivalent days range (partial, same days as current week)
+            if let lastWeekPartialRange = currentDate.partialWeekDateRange(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day, endDay: currentDayOfWeek) {
+                self.dateRanges["lastWeekPartial"] = lastWeekPartialRange.formatted
+            }
+            
+            // Current month - full month range
             if let currentMonthRange = currentDate.monthDateRange(year: currentMonthYear, month: currentMonth) {
-                self.dateRanges["thisMonth"] = currentMonthRange.formatted
+                self.dateRanges["thisMonthFull"] = currentMonthRange.formatted
             }
             
+            // Current month - partial range (1st to current day)
+            if let currentMonthPartialRange = currentDate.partialMonthDateRange(year: currentMonthYear, month: currentMonth) {
+                self.dateRanges["thisMonth"] = currentMonthPartialRange.formatted
+            }
+            
+            // Last month - full month range
             if let lastMonthRange = currentDate.monthDateRange(year: lastMonthYear, month: lastMonth) {
-                self.dateRanges["lastMonth"] = lastMonthRange.formatted
+                self.dateRanges["lastMonthFull"] = lastMonthRange.formatted
             }
             
+            // Last month - equivalent days range (partial, same days as current month)
+            if let lastMonthPartialRange = currentDate.partialMonthDateRange(year: lastMonthYear, month: lastMonth) {
+                self.dateRanges["lastMonthPartial"] = lastMonthPartialRange.formatted
+            }
+            
+            // Current year - full year range
             if let currentYearRange = currentDate.yearDateRange(year: currentYear) {
-                self.dateRanges["thisYear"] = currentYearRange.formatted
+                self.dateRanges["thisYearFull"] = currentYearRange.formatted
             }
             
+            // Current year - partial range (Jan 1 to current day)
+            if let currentYearPartialRange = currentDate.partialYearDateRange(year: currentYear) {
+                self.dateRanges["thisYear"] = currentYearPartialRange.formatted
+            }
+            
+            // Last year - full year range
             if let lastYearRange = currentDate.yearDateRange(year: previousYear) {
-                self.dateRanges["lastYear"] = lastYearRange.formatted
+                self.dateRanges["lastYearFull"] = lastYearRange.formatted
+            }
+            
+            // Last year - equivalent days range (Jan 1 to same day of year)
+            if let lastYearPartialRange = currentDate.partialYearDateRange(year: previousYear) {
+                self.dateRanges["lastYearPartial"] = lastYearPartialRange.formatted
             }
             
             // Create a dispatch group to track when all fetch operations complete
             let group = DispatchGroup()
             
-            // Fetch weekly data
+            // Fetch full week data for last week
             group.enter()
-            healthKitManager.fetchMilesByBikeForWeek(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day) { miles, error in
+            healthKitManager.fetchMilesByBikeForWeek(
+                year: lastWeek.year,
+                month: lastWeek.month,
+                day: lastWeek.day
+            ) { miles, error in
                 DispatchQueue.main.async {
-                    self.milesBiked["lastWeek"] = miles
+                    self.milesBiked["lastWeekFull"] = miles
                     group.leave()
                 }
             }
             
+            // Fetch partial week data for last week (equivalent period)
             group.enter()
-            healthKitManager.fetchMilesByBikeForWeek(year: currentWeek.year, month: currentWeek.month, day: currentWeek.day) { miles, error in
+            healthKitManager.fetchMilesByBikeForPartialWeek(
+                year: lastWeek.year,
+                month: lastWeek.month,
+                day: lastWeek.day,
+                currentWeekDay: currentDayOfWeek
+            ) { miles, error in
+                DispatchQueue.main.async {
+                    self.milesBiked["lastWeekPartial"] = miles
+                    group.leave()
+                }
+            }
+            
+            // Fetch current partial week data
+            group.enter()
+            healthKitManager.fetchMilesByBikeForPartialWeek(
+                year: currentWeek.year,
+                month: currentWeek.month,
+                day: currentWeek.day,
+                currentWeekDay: currentDayOfWeek
+            ) { miles, error in
                 DispatchQueue.main.async {
                     self.milesBiked["thisWeek"] = miles
                     group.leave()
                 }
             }
             
-            // Fetch monthly data
+            // Fetch full month data for last month
             group.enter()
-            healthKitManager.fetchMilesByBikeForMonth(year: lastMonthYear, month: lastMonth) { miles, error in
+            healthKitManager.fetchMilesByBikeForMonth(
+                year: lastMonthYear,
+                month: lastMonth
+            ) { miles, error in
                 DispatchQueue.main.async {
-                    self.milesBiked["lastMonth"] = miles
+                    self.milesBiked["lastMonthFull"] = miles
                     group.leave()
                 }
             }
             
+            // Fetch partial month data for last month (equivalent period)
             group.enter()
-            healthKitManager.fetchMilesByBikeForMonth(year: currentMonthYear, month: currentMonth) { miles, error in
+            healthKitManager.fetchMilesByBikeForPartialMonth(
+                year: lastMonthYear,
+                month: lastMonth,
+                day: currentDayOfMonth
+            ) { miles, error in
+                DispatchQueue.main.async {
+                    self.milesBiked["lastMonthPartial"] = miles
+                    group.leave()
+                }
+            }
+            
+            // Fetch current partial month data
+            group.enter()
+            healthKitManager.fetchMilesByBikeForPartialMonth(
+                year: currentMonthYear,
+                month: currentMonth,
+                day: currentDayOfMonth
+            ) { miles, error in
                 DispatchQueue.main.async {
                     self.milesBiked["thisMonth"] = miles
                     group.leave()
                 }
             }
             
-            // Fetch yearly data
+            // Fetch full year data for last year
             group.enter()
-            healthKitManager.fetchMilesByBikeForYear(year: previousYear) { miles, error in
+            healthKitManager.fetchMilesByBikeForYear(
+                year: previousYear
+            ) { miles, error in
                 DispatchQueue.main.async {
-                    self.milesBiked["lastYear"] = miles
+                    self.milesBiked["lastYearFull"] = miles
                     group.leave()
                 }
             }
             
+            // Fetch partial year data for last year (equivalent period)
             group.enter()
-            healthKitManager.fetchMilesByBikeForYear(year: currentMonthYear) { miles, error in
+            healthKitManager.fetchMilesByBikeForPartialYear(
+                year: previousYear,
+                dayOfYear: currentDayOfYear
+            ) { miles, error in
+                DispatchQueue.main.async {
+                    self.milesBiked["lastYearPartial"] = miles
+                    group.leave()
+                }
+            }
+            
+            // Fetch current partial year data
+            group.enter()
+            healthKitManager.fetchMilesByBikeForPartialYear(
+                year: currentYear,
+                dayOfYear: currentDayOfYear
+            ) { miles, error in
                 DispatchQueue.main.async {
                     self.milesBiked["thisYear"] = miles
                     group.leave()
@@ -465,72 +786,6 @@ struct ContentView: View {
         return Calendar.current.date(from: components) ?? Date()
     }
     
-    // Total distance card showing the current year's total
-    private func totalDistanceCard() -> some View {
-        let thisYearMiles = milesBiked["thisYear"] ?? 0
-        
-        return VStack(alignment: .center, spacing: 8) {
-            Text("Total Distance \(dateRanges["thisYear"] ?? "")")
-                .font(.headline)
-                .fontWeight(.bold)
-            
-            HStack(alignment: .lastTextBaseline, spacing: 0) {
-                Text(numberFormatter.string(from: NSNumber(value: thisYearMiles)) ?? "0")
-                    .font(.system(size: 42, weight: .bold, design: .rounded))
-                    .foregroundColor(.blue)
-                    .padding(.trailing, 4)
-                
-                Text("miles")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            HStack(spacing: 12) {
-                VStack(spacing: 1) {
-                    HStack(alignment: .lastTextBaseline, spacing: 2) {
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisWeek"] ?? 0)) ?? "0")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        Text("mi")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                    Text("This Week")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 8)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
-                
-                VStack(spacing: 1) {
-                    HStack(alignment: .lastTextBaseline, spacing: 2) {
-                        Text(numberFormatter.string(from: NSNumber(value: milesBiked["thisMonth"] ?? 0)) ?? "0")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            
-                        Text("mi")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                    Text("This Month")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 8)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
-            }
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color(.secondarySystemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
-        )
-    }
 }
 
 // Custom spinner view with continuous rotation animation
