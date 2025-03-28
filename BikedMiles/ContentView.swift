@@ -96,17 +96,13 @@ struct ThreeWayStatCard: View {
                         Text(formatPercentChange(percentChangeFromEquivalent))
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundColor(
-                                currentValue > equivalentValue ? .green :
-                                currentValue < equivalentValue ? .red : .gray
-                            )
+                            .foregroundColor(.white)
                     }
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color(.systemBackground))
-                            .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
+                            .fill(currentValue > equivalentValue ? Color.green : currentValue < equivalentValue ? Color.red : Color.gray)
                     )
                 }
                 
@@ -145,17 +141,13 @@ struct ThreeWayStatCard: View {
                         Text(formatPercentChange(percentChangeFromLast))
                             .font(.caption)
                             .fontWeight(.semibold)
-                            .foregroundColor(
-                                currentValue > lastValue ? .green :
-                                currentValue < lastValue ? .red : .gray
-                            )
+                            .foregroundColor(.white)
                     }
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color(.systemBackground))
-                            .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
+                            .fill(currentValue > lastValue ? Color.green : currentValue < lastValue ? Color.red : Color.gray)
                     )
                 }
                 
@@ -182,19 +174,19 @@ struct ThreeWayStatCard: View {
     private func getTrendIcon(baseValue: Double, comparedValue: Double) -> some View {
         if baseValue == 0 && comparedValue > 0 {
             return Image(systemName: "arrow.up.circle.fill")
-                .foregroundColor(.green)
+                .foregroundColor(.white)
                 .font(.subheadline)
         } else if comparedValue > baseValue {
             return Image(systemName: "arrow.up.circle.fill")
-                .foregroundColor(.green)
+                .foregroundColor(.white)
                 .font(.subheadline)
         } else if comparedValue < baseValue {
             return Image(systemName: "arrow.down.circle.fill")
-                .foregroundColor(.red)
+                .foregroundColor(.white)
                 .font(.subheadline)
         } else {
             return Image(systemName: "equal.circle.fill")
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
                 .font(.subheadline)
         }
     }
