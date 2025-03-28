@@ -2,6 +2,7 @@ import XCTest
 @testable import BikedMiles
 
 final class DateHelpersTests: XCTestCase {
+    // MARK: - Date Range Tests
     let calendar = Calendar.current
     
     private func makeDate(year: Int, month: Int, day: Int, hour: Int = 12) -> Date {
@@ -116,5 +117,120 @@ final class DateHelpersTests: XCTestCase {
         
         XCTAssertEqual(lastWeekResult.year, 2025)
         XCTAssertEqual(lastWeekResult.month, 1)
+    }
+    
+    // MARK: - Date Range Formatting Tests
+    
+    func test_formatDateRange() {
+        let date = Date()
+        let startDate = makeDate(year: 2025, month: 3, day: 15)
+        let endDate = makeDate(year: 2025, month: 3, day: 21)
+        
+        let formattedRange = date.formatDateRange(from: startDate, to: endDate)
+        
+        // Our DateHelpers implementation uses "MMM d-MMM d" format
+        XCTAssertEqual(formattedRange, "Mar 15-Mar 21")
+    }
+    
+    func test_weekDateRange() {
+        // Sunday, March 9, 2025
+        let testDate = makeDate(year: 2025, month: 3, day: 9)
+        
+        guard let weekRange = testDate.weekDateRange(startingFrom: testDate) else {
+            XCTFail("Failed to get week date range")
+            return
+        }
+        
+        // The week should start on Sunday (Mar 9) and end on Saturday (Mar 15)
+        let expectedStartDay = 9
+        let expectedEndDay = 15
+        
+        let startDay = calendar.component(.day, from: weekRange.startDate)
+        let endDay = calendar.component(.day, from: weekRange.endDate)
+        
+        XCTAssertEqual(startDay, expectedStartDay)
+        XCTAssertEqual(endDay, expectedEndDay)
+        XCTAssertEqual(weekRange.formatted, "Mar 9-Mar 15")
+    }
+    
+    func test_weekDateRangeCrossingMonths() {
+        // Saturday, January 31, 2025
+        let testDate = makeDate(year: 2025, month: 1, day: 31)
+        
+        // Find the start of this week (Sunday, Jan 26)
+        let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: testDate)
+        guard let weekStart = calendar.date(from: components) else {
+            XCTFail("Failed to get week start")
+            return
+        }
+        
+        guard let weekRange = testDate.weekDateRange(startingFrom: weekStart) else {
+            XCTFail("Failed to get week date range")
+            return
+        }
+        
+        // Week should be Jan 26 - Feb 1
+        let startMonth = calendar.component(.month, from: weekRange.startDate)
+        let endMonth = calendar.component(.month, from: weekRange.endDate)
+        
+        XCTAssertEqual(startMonth, 1) // January
+        XCTAssertEqual(endMonth, 2)   // February
+        XCTAssertEqual(weekRange.formatted, "Jan 26-Feb 1")
+    }
+    
+    func test_monthDateRange() {
+        // February 15, 2025
+        let testDate = makeDate(year: 2025, month: 2, day: 15)
+        
+        guard let monthRange = testDate.monthDateRange(year: 2025, month: 2) else {
+            XCTFail("Failed to get month date range")
+            return
+        }
+        
+        // February 2025 should start on day 1 and end on day 28 (not a leap year)
+        let startDay = calendar.component(.day, from: monthRange.startDate)
+        let endDay = calendar.component(.day, from: monthRange.endDate)
+        
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endDay, 28)
+        XCTAssertEqual(monthRange.formatted, "February 2025")
+    }
+    
+    func test_monthDateRangeForLeapYear() {
+        // February in a leap year (2024)
+        let testDate = makeDate(year: 2024, month: 2, day: 15)
+        
+        guard let monthRange = testDate.monthDateRange(year: 2024, month: 2) else {
+            XCTFail("Failed to get month date range")
+            return
+        }
+        
+        // February 2024 should start on day 1 and end on day 29 (leap year)
+        let endDay = calendar.component(.day, from: monthRange.endDate)
+        
+        XCTAssertEqual(endDay, 29)
+        XCTAssertEqual(monthRange.formatted, "February 2024")
+    }
+    
+    func test_yearDateRange() {
+        // 2025
+        let testDate = makeDate(year: 2025, month: 6, day: 15)
+        
+        guard let yearRange = testDate.yearDateRange(year: 2025) else {
+            XCTFail("Failed to get year date range")
+            return
+        }
+        
+        // 2025 should start on Jan 1 and end on Dec 31
+        let startMonth = calendar.component(.month, from: yearRange.startDate)
+        let startDay = calendar.component(.day, from: yearRange.startDate)
+        let endMonth = calendar.component(.month, from: yearRange.endDate)
+        let endDay = calendar.component(.day, from: yearRange.endDate)
+        
+        XCTAssertEqual(startMonth, 1)
+        XCTAssertEqual(startDay, 1)
+        XCTAssertEqual(endMonth, 12)
+        XCTAssertEqual(endDay, 31)
+        XCTAssertEqual(yearRange.formatted, "2025")
     }
 }
