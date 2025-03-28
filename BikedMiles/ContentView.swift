@@ -63,8 +63,8 @@ struct ThreeWayStatCard: View {
                         .foregroundColor(.secondary)
                 }
             }
+            .padding(.vertical, 4)
             .padding(.horizontal, 2)
-            .padding(.bottom, 4)
             
             Divider()
                 .padding(.vertical, 6)
@@ -374,11 +374,11 @@ struct ContentView: View {
         // Wrap the entire view in withAnimation for state changes
         VStack {
             HStack {
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Text("🚴‍♀️")
-                        .font(.largeTitle)
+                        .font(.title2)
                     Text("Miles Biked")
-                        .font(.largeTitle)
+                        .font(.title2)
                         .fontWeight(.bold)
                 }
                 .padding(.leading, 4)
@@ -404,9 +404,9 @@ struct ContentView: View {
                 .padding(8)
                 .padding(.trailing, 4)
             }
-            .padding(.top, 25)
+            .padding(.top, 20)
             .padding(.horizontal)
-            .padding(.bottom, 10)
+            .padding(.bottom, 4)
 
             if isAuthorized {
                 if isLoading && milesBiked.isEmpty {
