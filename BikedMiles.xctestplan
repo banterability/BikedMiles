@@ -23,21 +23,6 @@
         "identifier" : "1F9A9B662D580A17006FF330",
         "name" : "BikedMilesTests"
       }
-    },
-    {
-      "parallelizable" : true,
-      "skippedTests" : {
-        "suites" : [
-          {
-            "name" : "BikedMilesTest"
-          }
-        ]
-      },
-      "target" : {
-        "containerPath" : "container:BikedMiles.xcodeproj",
-        "identifier" : "1F9A9B662D580A17006FF330",
-        "name" : "BikedMilesTests"
-      }
     }
   ],
   "version" : 1
