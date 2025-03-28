@@ -135,6 +135,7 @@ struct ContentView: View {
     }()
     
     var body: some View {
+        // Wrap the entire view in withAnimation for state changes
         VStack {
             HStack {
                 Text("🚴‍♀️ Miles by Bike")
@@ -143,17 +144,18 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                // Refresh button
+                // Refresh button with spinner animation
                 Button(action: {
-                    withAnimation {
-                        fetchMilesData()
-                    }
+                    fetchMilesData()
                 }) {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                        .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-                        .animation(isLoading ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default, value: isLoading)
+                    if isLoading {
+                        SpinnerView()
+                            .frame(width: 24, height: 24)
+                    } else {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
                 }
                 .disabled(isLoading)
                 .padding(.trailing)
@@ -165,9 +167,16 @@ struct ContentView: View {
             if isAuthorized {
                 if isLoading && milesBiked.isEmpty {
                     Spacer()
-                    ProgressView("Loading your cycling data...")
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .padding()
+                    VStack(spacing: 16) {
+                        SpinnerView()
+                            .frame(width: 40, height: 40)
+                        
+                        Text("Loading your cycling data...")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .transition(.opacity)
                     Spacer()
                 } else {
                     ScrollView {
@@ -187,9 +196,9 @@ struct ContentView: View {
                                 lastDateRange: dateRanges["lastWeek"] ?? "",
                                 currentDateRange: dateRanges["thisWeek"] ?? ""
                             )
+                            .id(milesBiked["lastWeek"])
                             .transition(.opacity)
                             .animation(.easeIn, value: milesBiked["lastWeek"])
-                            .animation(.easeIn, value: milesBiked["thisWeek"])
                             
                             // Monthly Stats
                             StatCard(
@@ -202,9 +211,9 @@ struct ContentView: View {
                                 lastDateRange: dateRanges["lastMonth"] ?? "",
                                 currentDateRange: dateRanges["thisMonth"] ?? ""
                             )
+                            .id(milesBiked["lastMonth"])
                             .transition(.opacity)
                             .animation(.easeIn, value: milesBiked["lastMonth"])
-                            .animation(.easeIn, value: milesBiked["thisMonth"])
                             
                             // Yearly Stats
                             StatCard(
@@ -217,9 +226,9 @@ struct ContentView: View {
                                 lastDateRange: dateRanges["lastYear"] ?? "",
                                 currentDateRange: dateRanges["thisYear"] ?? ""
                             )
+                            .id(milesBiked["lastYear"])
                             .transition(.opacity)
                             .animation(.easeIn, value: milesBiked["lastYear"])
-                            .animation(.easeIn, value: milesBiked["thisYear"])
                         }
                         .padding()
                     }
@@ -377,6 +386,23 @@ struct ContentView: View {
         components.month = month
         components.day = day
         return Calendar.current.date(from: components) ?? Date()
+    }
+}
+
+// Custom spinner view with continuous rotation animation
+struct SpinnerView: View {
+    @State private var isAnimating = false
+    
+    var body: some View {
+        Circle()
+            .trim(from: 0.0, to: 0.8)
+            .stroke(Color.blue, lineWidth: 2)
+            .frame(width: 24, height: 24)
+            .rotationEffect(Angle(degrees: isAnimating ? 360 : 0))
+            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating)
+            .onAppear {
+                isAnimating = true
+            }
     }
 }
 
