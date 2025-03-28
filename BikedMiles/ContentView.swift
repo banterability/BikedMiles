@@ -156,7 +156,7 @@ struct ThreeWayStatCard: View {
                 
                 // Trend compared to last full period
                 if lastValue > 0 {
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .trailing, spacing: 2) {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
                             Text(formatPercentChange(percentChangeFromLast))
