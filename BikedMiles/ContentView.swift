@@ -30,7 +30,7 @@ struct ThreeWayStatCard: View {
             return "∞%"
         }
         let absChange = abs(change)
-        let formattedValue = String(format: "%.1f", absChange)
+        let formattedValue = String(format: "%.0f", absChange)
         return "\(formattedValue)%"
     }
     
