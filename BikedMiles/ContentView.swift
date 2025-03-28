@@ -172,20 +172,17 @@ struct ContentView: View {
                 }) {
                     if isLoading {
                         SpinnerView()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                     } else {
-                        Image(systemName: "arrow.clockwise.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(.blue)
-                            .imageScale(.large)
+                        Image(systemName: "arrow.clockwise")
+                            .font(.headline)
+                            .foregroundColor(.gray)
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
                 .disabled(isLoading)
                 .padding(8)
-                .background(Color.blue.opacity(0.1))
-                .clipShape(Circle())
                 .padding(.trailing, 4)
             }
             .padding(.top, 25)
