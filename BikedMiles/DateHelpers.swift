@@ -12,6 +12,62 @@ enum DateError: Error {
 }
 
 extension Date {
+    // Returns a formatted string for a date range
+    func formatDateRange(from startDate: Date, to endDate: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return "\(formatter.string(from: startDate))-\(formatter.string(from: endDate))"
+    }
+    
+    // Get week date range (Sunday to Saturday)
+    func weekDateRange(startingFrom date: Date) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        guard let weekStart = calendar.date(from: components) else { return nil }
+        guard let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart) else { return nil }
+        
+        let formattedRange = formatDateRange(from: weekStart, to: weekEnd)
+        return (weekStart, weekEnd, formattedRange)
+    }
+    
+    // Get month date range
+    func monthDateRange(year: Int, month: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+        
+        guard let monthStart = calendar.date(from: components),
+              let nextMonth = calendar.date(byAdding: .month, value: 1, to: monthStart),
+              let monthEnd = calendar.date(byAdding: .day, value: -1, to: nextMonth) else { return nil }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        let formattedMonth = formatter.string(from: monthStart)
+        
+        return (monthStart, monthEnd, formattedMonth)
+    }
+    
+    // Get year date range
+    func yearDateRange(year: Int) -> (startDate: Date, endDate: Date, formatted: String)? {
+        let calendar = Calendar.current
+        var components = DateComponents()
+        components.year = year
+        components.month = 1
+        components.day = 1
+        
+        guard let yearStart = calendar.date(from: components),
+              let nextYear = calendar.date(byAdding: .year, value: 1, to: yearStart),
+              let yearEnd = calendar.date(byAdding: .day, value: -1, to: nextYear) else { return nil }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy"
+        let formattedYear = formatter.string(from: yearStart)
+        
+        return (yearStart, yearEnd, formattedYear)
+    }
+    
     func thisWeek() throws -> (year: Int, month: Int, day: Int) {
         let calendar = Calendar.current
         // Get the start of the week containing this date
