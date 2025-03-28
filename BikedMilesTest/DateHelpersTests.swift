@@ -2,7 +2,6 @@ import XCTest
 @testable import BikedMiles
 
 final class DateHelpersTests: XCTestCase {
-    // MARK: - Date Range Tests
     let calendar = Calendar.current
     
     private func makeDate(year: Int, month: Int, day: Int, hour: Int = 12) -> Date {
@@ -118,8 +117,6 @@ final class DateHelpersTests: XCTestCase {
         XCTAssertEqual(lastWeekResult.year, 2025)
         XCTAssertEqual(lastWeekResult.month, 1)
     }
-    
-    // MARK: - Date Range Formatting Tests
     
     func test_formatDateRange() {
         let date = Date()
