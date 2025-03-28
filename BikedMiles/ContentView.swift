@@ -480,7 +480,8 @@ struct ContentView: View {
                             .transition(.opacity)
                             .animation(.easeIn, value: milesBiked["thisYear"])
                         }
-                        .padding()
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
                     .coordinateSpace(name: "pullToRefresh")
                 }
