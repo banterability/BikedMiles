@@ -66,7 +66,8 @@ struct ThreeWayStatCard: View {
             .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.blue.opacity(0.05))
+                    .fill(Color(.systemBackground))
+                    .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1)
             )
             
             Divider()
@@ -145,7 +146,8 @@ struct ThreeWayStatCard: View {
                         .padding(.vertical, 2)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.gray.opacity(0.15))
+                                .fill(Color(.systemBackground))
+                                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
                         )
                         
                         Text("vs. same period")
@@ -173,7 +175,8 @@ struct ThreeWayStatCard: View {
                         .padding(.vertical, 2)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.gray.opacity(0.15))
+                                .fill(Color(.systemBackground))
+                                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 0)
                         )
                         
                         Text("vs. total")
