@@ -32,44 +32,49 @@ struct StatCard: View {
                 .font(.headline)
                 .fontWeight(.bold)
             
-            HStack(alignment: .top, spacing: 20) {
-                // Last period stats
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(lastPeriod)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    
-                    Text("\(formatMiles(lastValue)) mi")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                }
+            // Period labels
+            HStack {
+                Text(lastPeriod)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                 
                 Spacer()
                 
-                // Current period stats
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(currentPeriod)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    
-                    HStack(alignment: .center, spacing: 4) {
-                        Text("\(formatMiles(currentValue)) mi")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        if lastValue > 0 {
-                            HStack(spacing: 2) {
-                                getTrendIcon(lastValue: lastValue, currentValue: currentValue)
-                                Text(formattedPercentChange)
-                                    .font(.caption)
-                                    .foregroundColor(
-                                        currentValue > lastValue ? .green :
-                                        currentValue < lastValue ? .red : .gray
-                                    )
-                            }
-                        }
+                Text(currentPeriod)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Values and trend indicator
+            HStack(alignment: .center) {
+                // Last period value (left aligned)
+                Text("\(formatMiles(lastValue)) mi")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                // Trend indicator (centered)
+                if lastValue > 0 {
+                    HStack(spacing: 2) {
+                        getTrendIcon(lastValue: lastValue, currentValue: currentValue)
+                        Text(formattedPercentChange)
+                            .font(.caption)
+                            .foregroundColor(
+                                currentValue > lastValue ? .green :
+                                currentValue < lastValue ? .red : .gray
+                            )
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                } else {
+                    Spacer()
+                        .frame(maxWidth: .infinity)
                 }
+                
+                // Current period value (right aligned)
+                Text("\(formatMiles(currentValue)) mi")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding(16)
