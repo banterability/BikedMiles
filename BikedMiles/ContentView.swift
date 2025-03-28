@@ -127,7 +127,7 @@ struct ThreeWayStatCard: View {
             HStack(spacing: 12) {
                 // Trend compared to equivalent period
                 if equivalentValue > 0 {
-                    HStack(spacing: 4) {
+                    VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: equivalentValue, comparedValue: currentValue)
                             Text(formatPercentChange(percentChangeFromEquivalent))
@@ -156,7 +156,7 @@ struct ThreeWayStatCard: View {
                 
                 // Trend compared to last full period
                 if lastValue > 0 {
-                    HStack(spacing: 4) {
+                    VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 2) {
                             getTrendIcon(baseValue: lastValue, comparedValue: currentValue)
                             Text(formatPercentChange(percentChangeFromLast))
@@ -428,7 +428,7 @@ struct ContentView: View {
                         RefreshControl(coordinateSpaceName: "pullToRefresh", onRefresh: fetchMilesData)
                             .padding(.top, -50)
                         
-                        VStack(spacing: 14) {
+                        VStack(spacing: 12) {
                             // Weekly Stats with Three-Way Comparison
                             ThreeWayStatCard(
                                 lastPeriod: "Last Week",
