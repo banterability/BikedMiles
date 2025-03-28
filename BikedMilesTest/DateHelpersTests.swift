@@ -9,25 +9,42 @@ final class DateHelpersTests: XCTestCase {
         return calendar.date(from: components)!
     }
     
-    func test_thisWeekInJanuary() {
-        // January 15th, 2025
+    func test_thisWeekInJanuary() throws {
         let testDate = makeDate(year: 2025, month: 1, day: 15)
         
-        let result = try? testDate.thisWeek()
+        let result = try testDate.thisWeek()
         
-        XCTAssertEqual(result?.year, 2025)
-        XCTAssertEqual(result?.month, 1)
+        XCTAssertEqual(result.year, 2025)
+        XCTAssertEqual(result.month, 1)
+        XCTAssertEqual(result.day, 12)
     }
     
-    func test_lastWeekCrossingJanuaryDecember() throws {
-        // January 2nd, 2025 (Wednesday)
+    func test_sundayInMarch() throws {
+        let testDate = makeDate(year: 2025, month: 3, day: 9)
+        
+        let thisWeek = try testDate.thisWeek()
+        XCTAssertEqual(thisWeek.year, 2025)
+        XCTAssertEqual(thisWeek.month, 3)
+        XCTAssertEqual(thisWeek.day, 9) //same day, since it's already sunday
+        
+        let lastWeek = try testDate.lastWeek()
+        XCTAssertEqual(lastWeek.year, 2025)
+        XCTAssertEqual(lastWeek.month, 3)
+        XCTAssertEqual(lastWeek.day, 2)
+    }
+    
+    func test_weekCrossingJanuaryDecember() throws {
         let testDate = makeDate(year: 2025, month: 1, day: 2)
         
-        let result = try testDate.lastWeek()
+        let thisWeek = try testDate.thisWeek()
+        XCTAssertEqual(thisWeek.year, 2024)
+        XCTAssertEqual(thisWeek.month, 12)
+        XCTAssertEqual(thisWeek.day, 29)
         
-        XCTAssertEqual(result.year, 2024)
-        XCTAssertEqual(result.month, 12)
-        XCTAssertEqual(result.day, 29)
+        let lastWeek = try testDate.lastWeek()
+        XCTAssertEqual(lastWeek.year, 2024)
+        XCTAssertEqual(lastWeek.month, 12)
+        XCTAssertEqual(lastWeek.day, 22)
     }
     
     func test_thisMonthFebruary() throws {

@@ -88,7 +88,7 @@ struct ContentView: View {
             let (currentMonthYear, currentMonth) = try currentDate.thisMonth()
             let (lastMonthYear, lastMonth) = try currentDate.lastMonth()
             let previousYear = try currentDate.lastYear()
-            let currentWeek = currentDate.thisWeek();
+            let currentWeek = try currentDate.thisWeek();
             let lastWeek = try currentDate.lastWeek();
 
             healthKitManager.fetchMilesByBikeForWeek(year: lastWeek.year, month: lastWeek.month, day: lastWeek.day) { miles, error in self.milesBiked["lastWeek"] = miles}

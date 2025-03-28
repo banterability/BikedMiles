@@ -12,26 +12,44 @@ enum DateError: Error {
 }
 
 extension Date {
-    func thisWeek()  -> (year: Int, month: Int, day: Int) {
-        let calendar = Calendar.current;
+    func thisWeek() throws -> (year: Int, month: Int, day: Int) {
+        let calendar = Calendar.current
+        // Get the start of the week containing this date
+        // yearForWeekOfYear is crucial for handling dates near year boundaries
         let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
-        let weekStartDate = calendar.date(from: components)!
+        guard let weekStartDate = calendar.date(from: components) else {
+            throw DateError.calculationError
+        }
+        
         let year = calendar.component(.year, from: weekStartDate)
-        let month = calendar.component(.month, from :weekStartDate)
+        let month = calendar.component(.month, from: weekStartDate)
         let day = calendar.component(.day, from: weekStartDate)
         return (year, month, day)
     }
     
     func lastWeek() throws -> (year: Int, month: Int, day: Int) {
-        let calendar = Calendar.current;
+        let calendar = Calendar.current
+        
+        // First, find the start of the current week
         let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
-        let weekStartDate = calendar.date(from: components)!
-        guard let lastWeekDate = calendar.date(byAdding: .weekOfYear, value: -1, to: weekStartDate) else {
+        guard let weekStartDate = calendar.date(from: components) else {
             throw DateError.calculationError
         }
-        let year = calendar.component(.year, from: lastWeekDate)
-        let month = calendar.component(.month, from: lastWeekDate)
-        let day = calendar.component(.day, from: lastWeekDate)
+        
+        // Subtract 7 days to get to the same day in the previous week
+        guard let previousWeekSameDay = calendar.date(byAdding: .day, value: -7, to: weekStartDate) else {
+            throw DateError.calculationError
+        }
+        
+        // Get the start of that week
+        let prevWeekComponents = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: previousWeekSameDay)
+        guard let prevWeekStartDate = calendar.date(from: prevWeekComponents) else {
+            throw DateError.calculationError
+        }
+        
+        let year = calendar.component(.year, from: prevWeekStartDate)
+        let month = calendar.component(.month, from: prevWeekStartDate)
+        let day = calendar.component(.day, from: prevWeekStartDate)
         return (year, month, day)
     }
     
